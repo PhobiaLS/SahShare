@@ -1,0 +1,31 @@
+.custom-button {
+    -fx-font: 16px "Serif";
+    -fx-padding: 6;
+    -fx-background-color: #D0E6D7;
+    -fx-background-radius: 12;
+}
+
+.text-field {
+    -fx-focus-color: #D0E6D7;
+    -fx-faint-focus-color: -fx-control-inner-background;
+}
+
+.text-label {
+	-fx-font-size: 12;
+}
+
+.game-title {
+	-fx-font-size: 30;
+}
+
+.topBarText {
+	-fx-font: 16px "Serif";
+	-fx-background-color: #D0E6D7;
+	-fx-background-radius: 12;
+}
+
+.topBarBoxMain {
+	-fx-border-color: black;
+	-fx-border-width: 1;
+	-fx-border-radius: 10;
+}
