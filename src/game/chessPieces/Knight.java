@@ -1,4 +1,4 @@
-package chessPieces;
+package game.chessPieces;
 
 import geometry.Point;
 

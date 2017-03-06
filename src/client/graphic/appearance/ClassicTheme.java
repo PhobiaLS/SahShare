@@ -1,4 +1,4 @@
-package appirience;
+package client.graphic.appearance;
 
 import javafx.scene.paint.Color;
 

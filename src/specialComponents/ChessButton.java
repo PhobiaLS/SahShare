@@ -3,6 +3,7 @@ package specialComponents;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import client.graphic.Graphics;
 import game.*;
 
 public class ChessButton extends Button {

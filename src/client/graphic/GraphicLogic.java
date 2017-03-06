@@ -1,9 +1,9 @@
-package game;
+package client.graphic;
 
-import appirience.ClassicTheme;
-import appirience.Theme;
-import linguistics.EnglishLanguage;
-import linguistics.Language;
+import client.graphic.appearance.ClassicTheme;
+import client.graphic.appearance.Theme;
+import client.graphic.linguistics.EnglishLanguage;
+import client.graphic.linguistics.Language;
 
 public class GraphicLogic {
 	private Language language;

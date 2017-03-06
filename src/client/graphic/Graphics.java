@@ -1,8 +1,10 @@
-package game;
+package client.graphic;
 
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
+import game.Engine;
+import game.GameConstants;
 import geometry.Point;
 
 
@@ -15,6 +17,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import client.graphic.linguistics.EnglishLanguage;
+import client.graphic.linguistics.SerbianLanguage;
 import client.messages.AddOpponentAsFriend;
 import client.messages.AnswerRematch;
 import client.messages.ChatMessage;
@@ -61,8 +65,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import linguistics.EnglishLanguage;
-import linguistics.SerbianLanguage;
 import server.Account;
 import server.messages.FriendInformation;
 import server.messages.FriendLogout;
@@ -189,7 +191,7 @@ public class Graphics extends Application implements GameConstants {
 								Button bt2 = new Button(graphicLogic.getLanguage().getNoText());
 								bt2.setOnAction(e1 -> {
 									Scene scene = new Scene(getMainPane(prStage), 900, 650);
-									scene.getStylesheets().add("file:src/style.css");
+									scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 									prStage.setScene(scene);
 									showNemG.close();
 								});
@@ -233,7 +235,7 @@ public class Graphics extends Application implements GameConstants {
 											e2.printStackTrace();
 										}
 										Scene scene = new Scene(getMainPane(prStage), 900, 650);
-										scene.getStylesheets().add("file:src/style.css");
+										scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 										prStage.setScene(scene);
 										endGameStage.close();
 									});
@@ -278,7 +280,7 @@ public class Graphics extends Application implements GameConstants {
 								Button bt2 = new Button(graphicLogic.getLanguage().getNoText());
 								bt2.setOnAction(e1 -> {
 									Scene scene = new Scene(getMainPane(prStage), 900, 650);
-									scene.getStylesheets().add("file:src/style.css");
+									scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 									prStage.setScene(scene);
 									showNemG.close();
 								});
@@ -321,7 +323,7 @@ public class Graphics extends Application implements GameConstants {
 											e2.printStackTrace();
 										}
 										Scene scene = new Scene(getMainPane(prStage), 900, 650);
-										scene.getStylesheets().add("file:src/style.css");
+										scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 										prStage.setScene(scene);
 										endGameStage.close();
 									});
@@ -404,7 +406,7 @@ public class Graphics extends Application implements GameConstants {
 										opponentTimer = new PlayerTimer(gameRequestOp.getGameTime(), TEAM_BLACK);
 										Pane gamePane = getGamePane(prStage, gameRequestOp.getClientUsername(), gameRequestOp.getRating());
 										Scene gameScene = new Scene(gamePane, 900, 650);
-										gameScene.getStylesheets().add("file:src/style.css");
+										gameScene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 										prStage.setScene(gameScene);
 										gameRequestStage.close();
 									});
@@ -441,7 +443,7 @@ public class Graphics extends Application implements GameConstants {
 						Platform.runLater(() -> {
 							Pane gamePane = getGamePane(prStage, gAccepted.getOpponentUsername(), gAccepted.getPlayerRating());
 							Scene gameScene = new Scene(gamePane, 900, 650);
-							gameScene.getStylesheets().add("file:src/style.css");
+							gameScene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 							prStage.setScene(gameScene);
 						});
 						
@@ -478,7 +480,7 @@ public class Graphics extends Application implements GameConstants {
 							Button btOk = new Button(graphicLogic.getLanguage().getOkText());
 							btOk.setOnAction(e -> {
 								Scene scene = new Scene(getMainPane(prStage), 900, 650);
-								scene.getStylesheets().add("file:src/style.css");
+								scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 								prStage.setScene(scene);
 								stageNew.close();
 							});
@@ -548,7 +550,7 @@ public class Graphics extends Application implements GameConstants {
 									e2.printStackTrace();
 								}
 								Scene scene = new Scene(getMainPane(prStage), 900, 650);
-								scene.getStylesheets().add("file:src/style.css");
+								scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 								prStage.setScene(scene);
 								endGameStage.close();
 							});
@@ -658,7 +660,7 @@ public class Graphics extends Application implements GameConstants {
 						account = loginRequestAccepted.getAccount();
 						Platform.runLater(() -> {
 							Scene scene = new Scene(getMainPane(prStage), 900, 650);
-							scene.getStylesheets().add("file:src/style.css");
+							scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 							prStage.setScene(scene);
 						});
 					}
@@ -686,7 +688,7 @@ public class Graphics extends Application implements GameConstants {
 					else if (obj instanceof SignUpRequestAccepted) {
 						Platform.runLater(() -> {
 							Scene scene = new Scene(getRegisterPage(prStage), 900, 650);
-							scene.getStylesheets().add("file:src/style.css");
+							scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 							prStage.setScene(scene);
 						});
 						
@@ -907,7 +909,7 @@ public class Graphics extends Application implements GameConstants {
 	@Override
 	public void start(Stage prStage) throws Exception {
 		Scene scene = new Scene(getLoginPage(prStage), 900, 650);
-		scene.getStylesheets().add("file:src/style.css");
+		scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 		prStage.setTitle("Chess project Theban");
 		prStage.setScene(scene);
 		prStage.setResizable(false);
@@ -977,7 +979,7 @@ public class Graphics extends Application implements GameConstants {
 		signUpButton.getStyleClass().add("custom-button");
 		signUpButton.setOnAction(e -> {
 			Scene scene = new Scene(getSignUpPage(prStage), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 		});
 		loginButtonsHBox.getChildren().addAll(loginButton, signUpButton);
@@ -1077,7 +1079,7 @@ public class Graphics extends Application implements GameConstants {
 		cancelSignUpButton.getStyleClass().add("custom-button");
 		cancelSignUpButton.setOnAction(e -> {
 			Scene scene = new Scene(getLoginPage(prStage), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 		});
 		signUpButtonsHBox.getChildren().addAll(registerButton, cancelSignUpButton);
@@ -1103,7 +1105,7 @@ public class Graphics extends Application implements GameConstants {
 		okRegisterButton.getStyleClass().add("custom-button");
 		okRegisterButton.setOnAction(e -> {
 			Scene scene = new Scene(getLoginPage(prStage), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 		});
 		
@@ -1208,7 +1210,7 @@ public class Graphics extends Application implements GameConstants {
 				Button yesBt = new Button(graphicLogic.getLanguage().getYesText());
 				yesBt.setOnAction(e1 -> {
 					Scene scene = new Scene(getMainPane(prStage), 900, 650);
-					scene.getStylesheets().add("file:src/style.css");
+					scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 					prStage.setScene(scene);
 					playingOnlineGame = false;
 					stage2.close();
@@ -1238,7 +1240,7 @@ public class Graphics extends Application implements GameConstants {
 			}
 			else {
 				Scene scene = new Scene(getMainPane(prStage), 900, 650);
-				scene.getStylesheets().add("file:src/style.css");
+				scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 				prStage.setScene(scene);
 			}
 		});
@@ -1301,7 +1303,7 @@ public class Graphics extends Application implements GameConstants {
 			}
 			account = null;
 			Scene scene = new Scene(getLoginPage(prStage), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 		});
 		
@@ -1336,7 +1338,7 @@ public class Graphics extends Application implements GameConstants {
 			playerTimer = new PlayerTimer(1, TEAM_WHITE);
 			opponentTimer = new PlayerTimer(1, TEAM_BLACK);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 			
 		});
@@ -1350,7 +1352,7 @@ public class Graphics extends Application implements GameConstants {
 			opponentTimer = new PlayerTimer(5, TEAM_BLACK);
 			//startATimer(prStage);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 			
 		});
@@ -1368,7 +1370,7 @@ public class Graphics extends Application implements GameConstants {
 			opponentTimer = new PlayerTimer(10, TEAM_BLACK);
 			//startATimer(prStage);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 			
 		});
@@ -1382,7 +1384,7 @@ public class Graphics extends Application implements GameConstants {
 			opponentTimer = new PlayerTimer(20, TEAM_BLACK);
 			//startATimer(prStage);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 			
 		});
@@ -1454,7 +1456,7 @@ public class Graphics extends Application implements GameConstants {
 		Button back = new Button(graphicLogic.getLanguage().getBackText());
 		back.setOnAction(e -> {
 			Scene scene = new Scene(getMainPane(prStage), 900, 650);
-			scene.getStylesheets().add("file:src/style.css");
+			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
 		});
 		pane.add(back, 0, 1);
@@ -1556,7 +1558,7 @@ public class Graphics extends Application implements GameConstants {
 					Button bt2 = new Button(graphicLogic.getLanguage().getNoText());
 					bt2.setOnAction(e -> {
 						Scene scene = new Scene(getMainPane(prStage), 900, 650);
-						scene.getStylesheets().add("file:src/style.css");
+						scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 						prStage.setScene(scene);
 						endGameStage.close();
 					});
@@ -1921,7 +1923,7 @@ public class Graphics extends Application implements GameConstants {
 					e2.printStackTrace();
 				}
 				Scene scene = new Scene(getMainPane(prStage), 900, 650);
-				scene.getStylesheets().add("file:src/style.css");
+				scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 				prStage.setScene(scene);
 				endGameStage.close();
 			});
@@ -1963,7 +1965,7 @@ public class Graphics extends Application implements GameConstants {
 					e2.printStackTrace();
 				}
 				Scene scene = new Scene(getMainPane(prStage), 900, 650);
-				scene.getStylesheets().add("file:src/style.css");
+				scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 				prStage.setScene(scene);
 				endGameStage.close();
 			});

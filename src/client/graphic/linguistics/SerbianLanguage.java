@@ -1,4 +1,4 @@
-package linguistics;
+package client.graphic.linguistics;
 
 public class SerbianLanguage extends Language {
 

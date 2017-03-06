@@ -1,4 +1,4 @@
-package linguistics;
+package client.graphic.linguistics;
 
 public abstract class Language {
 	protected String languageName;

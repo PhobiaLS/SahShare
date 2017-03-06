@@ -2,7 +2,7 @@ package game;
 
 import java.io.Serializable;
 
-import chessPieces.ChessPiece;
+import game.chessPieces.ChessPiece;
 import geometry.*;
 
 public class Move implements Serializable{

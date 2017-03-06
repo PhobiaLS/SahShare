@@ -6,8 +6,8 @@ import javafx.scene.image.*;
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
+import game.chessPieces.*;
 import bot.Bot;
-import chessPieces.*;
 
 public class Engine implements GameConstants{
 

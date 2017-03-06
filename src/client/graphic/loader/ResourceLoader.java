@@ -1,4 +1,4 @@
-package loader;
+package client.graphic.loader;
 
 import java.io.InputStream;
 
