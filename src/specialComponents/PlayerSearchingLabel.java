@@ -1,7 +1,7 @@
 package specialComponents;
 
-import serverMessages.PlayerSearchInformation;
 import javafx.scene.control.Label;
+import server.messages.PlayerSearchInformation;
 
 public class PlayerSearchingLabel extends Label {
 	private PlayerSearchInformation player;

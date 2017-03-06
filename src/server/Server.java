@@ -1,23 +1,6 @@
 package server;
 
 import game.GameConstants;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,49 +14,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
-
-
-
-
-
-import serverMessages.FriendInformation;
-import serverMessages.FriendLogout;
-import serverMessages.GameAccepted;
-import serverMessages.LoginRequestAccepted;
-import serverMessages.LoginRequestDenied;
-import serverMessages.OnlineFriends;
-import serverMessages.OnlinePlayersNumber;
-import serverMessages.PlayerRatingUpdate;
-import serverMessages.PlayerSearchEnded;
-import serverMessages.PlayerSearchInformation;
-import serverMessages.ShowRematchDialog;
-import serverMessages.SignUpRequestAccepted;
-import serverMessages.SignUpRequestDenied;
-import serverMessages.StartANewGame;
-import clientMessages.AddOpponentAsFriend;
-import clientMessages.AnswerRematch;
-import clientMessages.ChatMessage;
-import clientMessages.CloseThreadAndSocket;
-import clientMessages.GameAccept;
-import clientMessages.GameDeclined;
-import clientMessages.GameEnd;
-import clientMessages.GameRequest;
-import clientMessages.GameSessionEnded;
-import clientMessages.InformationSearchGames;
-import clientMessages.LoginRequest;
-import clientMessages.OnlineFriendsMessage;
-import clientMessages.PlayerMove;
-import clientMessages.SearchForGame;
-import clientMessages.SearchForGameCancel;
-import clientMessages.SignOutNotification;
-import clientMessages.SignUpRequest;
+import client.messages.AddOpponentAsFriend;
+import client.messages.AnswerRematch;
+import client.messages.ChatMessage;
+import client.messages.CloseThreadAndSocket;
+import client.messages.GameAccept;
+import client.messages.GameDeclined;
+import client.messages.GameEnd;
+import client.messages.GameRequest;
+import client.messages.GameSessionEnded;
+import client.messages.InformationSearchGames;
+import client.messages.LoginRequest;
+import client.messages.OnlineFriendsMessage;
+import client.messages.PlayerMove;
+import client.messages.SearchForGame;
+import client.messages.SearchForGameCancel;
+import client.messages.SignOutNotification;
+import client.messages.SignUpRequest;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import server.messages.FriendInformation;
+import server.messages.FriendLogout;
+import server.messages.GameAccepted;
+import server.messages.LoginRequestAccepted;
+import server.messages.LoginRequestDenied;
+import server.messages.OnlineFriends;
+import server.messages.OnlinePlayersNumber;
+import server.messages.PlayerRatingUpdate;
+import server.messages.PlayerSearchEnded;
+import server.messages.PlayerSearchInformation;
+import server.messages.ShowRematchDialog;
+import server.messages.SignUpRequestAccepted;
+import server.messages.SignUpRequestDenied;
+import server.messages.StartANewGame;
 
 public class Server extends Application implements GameConstants {
 	private static ArrayList<UserConnection> connections = new ArrayList<>();
@@ -98,7 +75,8 @@ public class Server extends Application implements GameConstants {
 			try {
 				serverSocket = new ServerSocket(8000);
 				Class.forName("com.mysql.jdbc.Driver");
-				connection = DriverManager.getConnection("jdbc:mysql://localhost/chessbase","chessUsername","chessPassword");
+				//connection = DriverManager.getConnection("jdbc:mysql://localhost/chessbase","chessUsername","chessPassword");
+				connection = DriverManager.getConnection("jdbc:mysql://localhost/chessdatabase","root","");
 				while (true) {
 					Socket connectedPlayer = serverSocket.accept();
 					InetAddress address = connectedPlayer.getInetAddress();

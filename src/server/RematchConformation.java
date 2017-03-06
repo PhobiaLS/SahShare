@@ -1,6 +1,6 @@
 package server;
 
-import clientMessages.AnswerRematch;
+import client.messages.AnswerRematch;
 
 public class RematchConformation {
 	private int userId1;

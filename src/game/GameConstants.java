@@ -16,4 +16,5 @@ public interface GameConstants {
 	public static int FIGURE_ROOK = 4;
 	public static int FIGURE_KING = 5;
 	public static int FIGURE_PAWN = 6;
+	
 }

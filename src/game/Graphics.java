@@ -15,10 +15,23 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-
-
-
-
+import client.messages.AddOpponentAsFriend;
+import client.messages.AnswerRematch;
+import client.messages.ChatMessage;
+import client.messages.CloseThreadAndSocket;
+import client.messages.GameAccept;
+import client.messages.GameDeclined;
+import client.messages.GameEnd;
+import client.messages.GameRequest;
+import client.messages.GameSessionEnded;
+import client.messages.InformationSearchGames;
+import client.messages.LoginRequest;
+import client.messages.OnlineFriendsMessage;
+import client.messages.PlayerMove;
+import client.messages.SearchForGame;
+import client.messages.SearchForGameCancel;
+import client.messages.SignOutNotification;
+import client.messages.SignUpRequest;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -51,43 +64,26 @@ import javafx.util.Duration;
 import linguistics.EnglishLanguage;
 import linguistics.SerbianLanguage;
 import server.Account;
-import serverMessages.FriendInformation;
-import serverMessages.FriendLogout;
-import serverMessages.GameAccepted;
-import serverMessages.GameSearchList;
-import serverMessages.LoginRequestAccepted;
-import serverMessages.LoginRequestDenied;
-import serverMessages.OnlineFriends;
-import serverMessages.OnlinePlayersNumber;
-import serverMessages.PlayerRatingUpdate;
-import serverMessages.PlayerSearchEnded;
-import serverMessages.PlayerSearchInformation;
-import serverMessages.ShowRematchDialog;
-import serverMessages.SignUpRequestAccepted;
-import serverMessages.SignUpRequestDenied;
-import serverMessages.StartANewGame;
+import server.messages.FriendInformation;
+import server.messages.FriendLogout;
+import server.messages.GameAccepted;
+import server.messages.GameSearchList;
+import server.messages.LoginRequestAccepted;
+import server.messages.LoginRequestDenied;
+import server.messages.OnlineFriends;
+import server.messages.OnlinePlayersNumber;
+import server.messages.PlayerRatingUpdate;
+import server.messages.PlayerSearchEnded;
+import server.messages.PlayerSearchInformation;
+import server.messages.ShowRematchDialog;
+import server.messages.SignUpRequestAccepted;
+import server.messages.SignUpRequestDenied;
+import server.messages.StartANewGame;
 import specialComponents.ChessButton;
 import specialComponents.FigureChoseButton;
 import specialComponents.OnlineFriendsLabel;
 import specialComponents.PlayerSearchingLabel;
 import specialComponents.PlayerTimer;
-import clientMessages.AddOpponentAsFriend;
-import clientMessages.AnswerRematch;
-import clientMessages.ChatMessage;
-import clientMessages.CloseThreadAndSocket;
-import clientMessages.GameAccept;
-import clientMessages.GameDeclined;
-import clientMessages.GameEnd;
-import clientMessages.GameRequest;
-import clientMessages.GameSessionEnded;
-import clientMessages.InformationSearchGames;
-import clientMessages.LoginRequest;
-import clientMessages.OnlineFriendsMessage;
-import clientMessages.PlayerMove;
-import clientMessages.SearchForGame;
-import clientMessages.SearchForGameCancel;
-import clientMessages.SignOutNotification;
-import clientMessages.SignUpRequest;
 
 
 public class Graphics extends Application implements GameConstants {

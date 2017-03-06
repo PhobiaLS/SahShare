@@ -1,7 +1,8 @@
 package game;
 
 import java.io.Serializable;
-import figure.Figure;
+
+import chessPieces.ChessPiece;
 import geometry.*;
 
 public class Move implements Serializable{
@@ -10,10 +11,10 @@ public class Move implements Serializable{
 	
 	private Point from;
 	private Point to;
-	private Figure fromFig;
-	private Figure toFig;
+	private ChessPiece fromFig;
+	private ChessPiece toFig;
 	
-	public Move(Point from, Point to, Figure fromFig, Figure toFig) {
+	public Move(Point from, Point to, ChessPiece fromFig, ChessPiece toFig) {
 		this.from = from;
 		this.to = to;
 		this.fromFig = fromFig;
@@ -28,11 +29,11 @@ public class Move implements Serializable{
 		return to;
 	}
 
-	public Figure getFromFig() {
+	public ChessPiece getFromFig() {
 		return fromFig;
 	}
 
-	public Figure getToFig() {
+	public ChessPiece getToFig() {
 		return toFig;
 	}
 	

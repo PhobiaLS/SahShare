@@ -6,12 +6,12 @@ import javafx.scene.image.*;
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
-import figure.*;
 import bot.Bot;
+import chessPieces.*;
 
 public class Engine implements GameConstants{
 
-	private Figure[][] board;
+	private ChessPiece[][] board;
 	private int onMove;
 	private ArrayList<Move> moves = new ArrayList<>();
 	private Point selFigure;
@@ -35,7 +35,7 @@ public class Engine implements GameConstants{
 	
 	//Kreira novu tablu\\
 	private void initializeBoard() {
-		board = new Figure[8][8];
+		board = new ChessPiece[8][8];
 		
 		for (int i = 2; i < 6; i++)
 			for (int j = 0; j < 8; j++)
@@ -83,8 +83,8 @@ public class Engine implements GameConstants{
 	}
 	
 	//Klonira figuru za potez\\
-	private Figure cloneFigure(Figure figure){
-		Figure clonedFigure = null;
+	private ChessPiece cloneFigure(ChessPiece figure){
+		ChessPiece clonedFigure = null;
 		
 		if(figure instanceof Bishop)
 			clonedFigure = new Bishop(figure.getTeam());
@@ -249,7 +249,7 @@ public class Engine implements GameConstants{
 	
 	//Menja figuru kada pijun stigne do kraja table\\
 	public void zamena(int i, int j,int figura){
-		Figure fig = null;
+		ChessPiece fig = null;
 		switch(figura){
 		case GameConstants.FIGURE_BISHOP://Bishop
 			fig = new Bishop(onMove);
@@ -281,7 +281,7 @@ public class Engine implements GameConstants{
 	public void interpretMove(Move move){
 		Point from = move.getFrom();
 		Point to = move.getTo();
-		Figure toFig = move.getToFig();
+		ChessPiece toFig = move.getToFig();
 		try {
 			makeMove(new Point(from.getI(), from.getJ()), new Point(to.getI(), to.getJ()));
 		} catch (Promotion e) {
@@ -300,7 +300,7 @@ public class Engine implements GameConstants{
 	//-----------Geteri---------------\\
 	
 	//Vraca celu tablu\\
-	public Figure[][] getBoard(){
+	public ChessPiece[][] getBoard(){
 		return board;
 	}
 	
@@ -401,7 +401,7 @@ public class Engine implements GameConstants{
 	private boolean proveri(Point kingPos,Point sPos, Point nPos,ArrayList<Point> protivFigure){
 		boolean ind = false;
 		//Privremeno pomera figuru
-		Figure fig = board[nPos.getI()][nPos.getJ()];
+		ChessPiece fig = board[nPos.getI()][nPos.getJ()];
 		board[nPos.getI()][nPos.getJ()] = board[sPos.getI()][sPos.getJ()];
 		board[sPos.getI()][sPos.getJ()] = null;
 		//Ako kralj nema napadaca posle pomeranja figure, figura moze da stane na to mesto

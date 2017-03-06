@@ -1,7 +1,7 @@
 package specialComponents;
 
 import javafx.scene.control.Label;
-import serverMessages.FriendInformation;
+import server.messages.FriendInformation;
 
 public class OnlineFriendsLabel extends Label {
 	private FriendInformation friend;
