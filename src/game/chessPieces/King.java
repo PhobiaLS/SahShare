@@ -2,6 +2,7 @@ package game.chessPieces;
 
 import geometry.Point;
 import java.util.ArrayList;
+import java.util.List;
 
 public class King extends ChessPiece {
 
@@ -16,8 +17,8 @@ public class King extends ChessPiece {
 	}
 
 	@Override
-	public ArrayList<Point> possibleMoves(int i, int j) {
-		ArrayList<Point> pos = new ArrayList<>();
+	public List<Point> possibleMoves(int i, int j) {
+		List<Point> pos = new ArrayList<>();
 		ChessPiece[][] board = game.getBoard();
 		
 		// proverava sever

@@ -1,6 +1,8 @@
 package bot;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
@@ -24,12 +26,12 @@ public class Bot {
 	//Odigra potez//
 	public void play() throws Draw, Checkmate {
 		Point move = null;
-		ArrayList<Point> moveableFigures;
+		List<Point> moveableFigures;
 		Point figura = null;
 		try {
 			moveableFigures = engine.getMovableFigures();//Uzima neku figuru koja moze da se pomera
 			figura = moveableFigures.get(randomize(moveableFigures.size()));
-			ArrayList<Point> possibleMoves = engine.getPossibleMoves(figura.getI(), figura.getJ());
+			List<Point> possibleMoves = engine.getPossibleMoves(figura.getI(), figura.getJ());
 			//Uzima neku od mogucih pozicija
 			move = possibleMoves.get(randomize(possibleMoves.size()));
 			try {

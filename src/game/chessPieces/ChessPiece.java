@@ -2,6 +2,8 @@ package game.chessPieces;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+
 import game.*;
 import geometry.*;
 
@@ -21,7 +23,7 @@ public abstract class ChessPiece implements Serializable{
 		this.team = team;
 	}
 	
-	public abstract ArrayList<Point> possibleMoves(int i, int j);
+	public abstract List<Point> possibleMoves(int i, int j);
 	
 	public String getImage() {
 		return image;
@@ -37,13 +39,12 @@ public abstract class ChessPiece implements Serializable{
 
 	/**
 	 * U zavisnosti od prosledjenog pravca, vraca sve moguce pozicije na koje figura može da stane.
-	 * Ovo je za fogire koje se krecu u pravima, Queen, Rook, Bishop
+	 * Ovo je za figure koje se krecu u pravcima, Queen, Rook, Bishop
 	 * @param x,y,direction
 	 * @return ArrayList<Point>
 	 */
 	final protected ArrayList<Point> directionalWalk(int x,int y, Directions direction){
-		int[] incremeters = retIncrementers(direction); // uzima inkrementere u zavisnosti od pravca kretanja
-		int inc_x = incremeters[0], inc_y = incremeters[1];  
+		int inc_x = direction.getX(), inc_y = direction.getY();  
 		ArrayList<Point> list = new ArrayList<>();
 		ChessPiece[][] board = game.getBoard(); // uzima tablu 
 		x -= inc_x; y -= inc_y; // uzima prvu poziciju setnje
@@ -61,34 +62,4 @@ public abstract class ChessPiece implements Serializable{
 		
 		return list;
 	}	
-	
-	/**
-	 * F-ja u zavisnosti od prosledjenog pravca, vraca inkrementere za x i y 
-	 * @param direction
-	 * @return {x,y} incrementers for the walk
-	 */
-	private int[] retIncrementers(Directions direction){
-		switch (direction) {
-		case UP_LEFT:
-			return new int[] {-1,-1};
-		case UP:
-			return new int[] {-1,0};
-		case UP_RIGHT:
-			return new int[] {-1,1};
-		case LEFT: 
-			return new int[] {0,-1};
-		case RIGHT:
-			return new int[] {0,1};
-		case DOWN_LEFT:
-			return new int[] {1,-1};
-		case DOWN:
-			return new int[] {1,0};
-		case DOWN_RIGHT:
-			return new int[] {1,1};
-		default:
-			return new int[] {0,0};
-		}
-	}
-	
-	
 }

@@ -2,6 +2,8 @@ package game;
 
 import geometry.Point;
 import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.image.*;
 import exceptions.Checkmate;
 import exceptions.Draw;
@@ -13,14 +15,14 @@ public class Engine implements GameConstants{
 
 	private ChessPiece[][] board;
 	private int onMove;
-	private ArrayList<Move> moves = new ArrayList<>();
+	private List<Move> moves = new ArrayList<>();
 	private Point selFigure;
 	private int typeOfGame;
 	private int team;
 	private Bot bot = null;
 
-	private ArrayList<Point> movFigures = new ArrayList<Point>();
-	private ArrayList<Point> attackers = new ArrayList<Point>();
+	private List<Point> movFigures = new ArrayList<Point>();
+	private List<Point> attackers = new ArrayList<Point>();
 	
 	public Engine(int typeOfGame,int team){
 		newGame();
@@ -343,9 +345,9 @@ public class Engine implements GameConstants{
 	}
 	
 	//Vraca putanjom kojom figura napada drugu figuru\\
-	private ArrayList<Point> getAttackingPath(Point attackerPosition,Point figurePosition){
+	private List<Point> getAttackingPath(Point attackerPosition,Point figurePosition){
 		//Put kojim figura napada kralja
-		ArrayList<Point> attackPath = new ArrayList<>();
+		List<Point> attackPath = new ArrayList<>();
 		//Dodajemo poziciju napadaca
 		attackPath.add(attackerPosition);
 		//Ako nije konj oonda ima jos neko polje na koje moze da se stane, da se blokira sah
@@ -398,7 +400,7 @@ public class Engine implements GameConstants{
 	}
 		
 	//Proverava da li bi se figurinim pomeranjem stvorio sah\\
-	private boolean proveri(Point kingPos,Point sPos, Point nPos,ArrayList<Point> protivFigure){
+	private boolean proveri(Point kingPos,Point sPos, Point nPos,List<Point> protivFigure){
 		boolean ind = false;
 		//Privremeno pomera figuru
 		ChessPiece fig = board[nPos.getI()][nPos.getJ()];
@@ -414,27 +416,27 @@ public class Engine implements GameConstants{
 	}
 	
 	//Uzima sve figure koje napadaju prosledjenu figuru\\
-	private ArrayList<Point> getAttackers(Point figurePostition,ArrayList<Point> FigureList){
+	private List<Point> getAttackers(Point figurePostition,List<Point> protivFigure){
 		//Lista figura koje napadaju
-		ArrayList<Point> attackers = new ArrayList<Point>();	
+		List<Point> attackers = new ArrayList<Point>();	
 		//provera da li je na udaru neke figure i ako jeste uzmi njenu poziciju
 		//Na udaru je ako se nalazi u listi pozicija na koje figura moze da skoci (figre.possibleMoves(i,j);)
-		for (int i = 0; i < FigureList.size(); i++) {
-			if(Point.exists(figurePostition,board[FigureList.get(i).getI()][FigureList.get(i).getJ()].possibleMoves(FigureList.get(i).getI(),FigureList.get(i).getJ())))
-				attackers.add(new Point(FigureList.get(i).getI(),FigureList.get(i).getJ()));
+		for (int i = 0; i < protivFigure.size(); i++) {
+			if(Point.exists(figurePostition,board[protivFigure.get(i).getI()][protivFigure.get(i).getJ()].possibleMoves(protivFigure.get(i).getI(),protivFigure.get(i).getJ())))
+				attackers.add(new Point(protivFigure.get(i).getI(),protivFigure.get(i).getJ()));
 		}
 		return attackers;
 	}
 	
 	//Daje sve figure koje igrac moze da pomera, u zavisnosti da li je sah ili nije\\
-	public ArrayList<Point> getMovableFigures() throws Draw, Checkmate{
+	public List<Point> getMovableFigures() throws Draw, Checkmate{
 		if((typeOfGame == GAME_MODE_ONLINE && onMove == team) || typeOfGame != GAME_MODE_ONLINE){
 			//Pozicija kralja trenutnog igraca
 			Point king = new Point(0, 0);
 			//Sve figure trenutnog igraca (sem kralja)
-			ArrayList<Point> mojeFigure = new ArrayList<>();
+			List<Point> mojeFigure = new ArrayList<>();
 			//Protivnicke figure
-			ArrayList<Point> protivFigure = new ArrayList<>();
+			List<Point> protivFigure = new ArrayList<>();
 			//Raspored Figura
 			for (int i = 0; i < board.length; i++) 
 				for (int j = 0; j < board.length; j++) 
@@ -470,9 +472,9 @@ public class Engine implements GameConstants{
 			//proveri da li moze neka da se ispreci ili pojede tu figuru
 			if(attackers.size()==1){
 				//Uzima putanju kojom figura napada kralja
-				ArrayList<Point> attackingPath = getAttackingPath(attackers.get(0), king);
+				List<Point> attackingPath = getAttackingPath(attackers.get(0), king);
 				//pomocna promenljiva za cuvanje mogucih poteza figure u for petlji
-				ArrayList<Point> posMov;
+				List<Point> posMov;
 				for (int i = 0; i < mojeFigure.size(); i++) {
 					//Uzimam sve moguce pozicije na koje igraceva figura moze da stane
 					posMov = board[mojeFigure.get(i).getI()][mojeFigure.get(i).getJ()].possibleMoves(mojeFigure.get(i).getI(), mojeFigure.get(i).getJ());
@@ -495,7 +497,7 @@ public class Engine implements GameConstants{
 				//Dodaj samo figure koje mogu da se pomeraju, a njihovim pomeranjem ne moze da se ugrozi kralj
 				
 				for (int i = 0; i < mojeFigure.size(); i++) {
-					ArrayList<Point> pos = board[mojeFigure.get(i).getI()][mojeFigure.get(i).getJ()].possibleMoves(mojeFigure.get(i).getI(), mojeFigure.get(i).getJ());
+					List<Point> pos = board[mojeFigure.get(i).getI()][mojeFigure.get(i).getJ()].possibleMoves(mojeFigure.get(i).getI(), mojeFigure.get(i).getJ());
 					if(pos.size()>0){
 						//Ako bar jedno pomeranje ne izaziva sah, dodaj figuru u listu pomerajucih figura
 						for (int j = 0; j < pos.size(); j++) {
@@ -521,16 +523,16 @@ public class Engine implements GameConstants{
 	}
 		
 	//Daje gde moze da skoci figura cije su koordinate prosledjene\\
-	public ArrayList<Point> getPossibleMoves(int i, int j){
+	public List<Point> getPossibleMoves(int i, int j){
 		if((typeOfGame == GAME_MODE_ONLINE && onMove == team) || typeOfGame != GAME_MODE_ONLINE){
 			if(board[i][j] != null && board[i][j].getTeam() == onMove){
 				//Izabiramo figuru igraca koji je na potezu i vracamo njene moguce poteze
 				selFigure = new Point(i, j);
 				//Lista polja na koje figura moze da skoci
-				ArrayList<Point> lista = board[i][j].possibleMoves(i, j);
+				List<Point> lista = (ArrayList<Point>) board[i][j].possibleMoves(i, j);
 				
 				//Kreiramo listu koja ce sadrzati validne poteze figure
-				ArrayList<Point> possibleMovies = new ArrayList<Point>(); 
+				List<Point> possibleMovies = new ArrayList<Point>(); 
 				
 				if(board[i][j] instanceof King){
 					//Ako smo kliknuli na kralja, samo uzimamo njegove moguce poteze i dodajemo rokade ako su moguce
@@ -554,7 +556,7 @@ public class Engine implements GameConstants{
 					
 					//Uzimamo mesto kralja i protivnicke figure
 					Point king = null;
-					ArrayList<Point> protivFigure = new ArrayList<>();
+					List<Point> protivFigure = new ArrayList<>();
 					for (int k = 0; k < board.length; k++) {
 						for (int k2 = 0; k2 < board.length; k2++) {
 							if(board[k][k2] != null && board[k][k2].getTeam()==onMove && board[k][k2] instanceof King){
@@ -566,7 +568,7 @@ public class Engine implements GameConstants{
 					
 					if(attackers != null && attackers.size()==1) {//Ako je kralj napadnut, daj moguce poteze koji ce ga spasiti
 						//Uzimamo put kojim je kralj napadnut
-						ArrayList<Point> path = getAttackingPath(attackers.get(0), king);
+						List<Point> path = getAttackingPath(attackers.get(0), king);
 						//proci kroz sve moguce poteze figure i odabrati samo one kojei se nalaze na putanji napada
 						//a da pritom pomeranjem figure na to mesto ne bi ugrozilo kralja sa druge strane
 						for (int k = 0; k < path.size(); k++) {

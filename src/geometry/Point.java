@@ -2,6 +2,7 @@ package geometry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Point implements Serializable {
 	
@@ -29,7 +30,7 @@ public class Point implements Serializable {
 		return j;
 	}
 	
-	public static boolean exists(Point p, ArrayList<Point> list) {
+	public static boolean exists(Point p, List<Point> list) {
 		for (int ii = 0; ii < list.size(); ii++)
 			if (p.equals(list.get(ii)))
 				return true;

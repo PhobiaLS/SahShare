@@ -6,16 +6,12 @@ import exceptions.Promotion;
 import game.Engine;
 import game.GameConstants;
 import geometry.Point;
-
-
-
-
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 import client.graphic.linguistics.EnglishLanguage;
 import client.graphic.linguistics.SerbianLanguage;
@@ -86,7 +82,6 @@ import specialComponents.FigureChoseButton;
 import specialComponents.OnlineFriendsLabel;
 import specialComponents.PlayerSearchingLabel;
 import specialComponents.PlayerTimer;
-
 
 public class Graphics extends Application implements GameConstants {
 	private Socket socket;
@@ -497,7 +492,7 @@ public class Graphics extends Application implements GameConstants {
 					}
 					else if (obj instanceof GameSearchList) {
 						GameSearchList gameSearchList = (GameSearchList) obj;
-						ArrayList<PlayerSearchInformation> listOfInf = gameSearchList.getListOfSearchGames();
+						List<PlayerSearchInformation> listOfInf = gameSearchList.getListOfSearchGames();
 						if (listOfInf != null) {
 							for (int i = 0; i < listOfInf.size(); i++) {
 								PlayerSearchingLabel lab = new PlayerSearchingLabel(listOfInf.get(i));
@@ -1656,7 +1651,7 @@ public class Graphics extends Application implements GameConstants {
 					buttonsChess[i][j].setGraphic(imgV);
 				}
 				buttonsChess[i][j].setOnAction(e -> {
-					ArrayList<Point> list = new ArrayList<Point>();
+					List<Point> list = new ArrayList<Point>();
 
 					int ii = ((ChessButton)e.getSource()).getI();
 					int jj = ((ChessButton)e.getSource()).getJ();
@@ -1890,7 +1885,7 @@ public class Graphics extends Application implements GameConstants {
  			}
 		try {
 			int k = 0;
-			ArrayList<Point> points = game.getMovableFigures();
+			List<Point> points = game.getMovableFigures();
 			while (k < points.size()) {
 				buttonsChess[points.get(k).getI()][points.get(k).getJ()].setDisable(false);
 				k++;

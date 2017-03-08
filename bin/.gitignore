@@ -1,14 +1,8 @@
-/appirience/
 /bot/
-/chessPieces/
 /client/
 /exceptions/
 /game/
 /geometry/
 /images/
-/linguistics/
-/loader/
-/mysql-connector-java-5.1.36-bin.jar
 /server/
 /specialComponents/
-/style.css
