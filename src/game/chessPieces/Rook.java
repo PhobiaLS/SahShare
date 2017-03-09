@@ -18,13 +18,12 @@ public class Rook extends ChessPiece {
 	}
 
 	@Override
-	public ArrayList<Point> possibleMoves(int i, int j) {
+	public ArrayList<Point> possibleMoves(int x, int y) {
 		ArrayList<Point> lista = new ArrayList<Point>();
 		
-		lista.addAll(directionalWalk(i, j, Directions.UP));
-		lista.addAll(directionalWalk(i, j, Directions.LEFT));
-		lista.addAll(directionalWalk(i, j, Directions.RIGHT));
-		lista.addAll(directionalWalk(i, j, Directions.DOWN));
+		for (Directions direction : Directions.getStreight()) {
+			lista.addAll(directionalWalk(x, y, direction));
+		}
 		
 		return lista;
 	}

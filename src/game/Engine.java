@@ -11,6 +11,9 @@ import exceptions.Promotion;
 import game.chessPieces.*;
 import bot.Bot;
 
+
+// TODO Implementirati novi isAttacked
+// TODO => Pravi novu granu i sredi engine skroz
 public class Engine implements GameConstants{
 
 	private ChessPiece[][] board;
@@ -112,17 +115,6 @@ public class Engine implements GameConstants{
 			if(moves.get(i).getFrom().getX() == figPosition.getY() && moves.get(i).getFrom().getY() == figPosition.getY())
 				return true;
 		}
-		return false;
-	}
-	
-	//Da li polju preti neka figura\\
-	private boolean isAttacked(Point poistion){
-		for (int i = 0; i < GameConstants.BOARD_SIZE; i++) {
-			for (int j = 0; j < GameConstants.BOARD_SIZE; j++) {
-				if(board[i][j] != null && board[i][j].getTeam() != onMove && Point.exists(poistion,board[i][j].possibleMoves(i, j)))
-					return true;
-			}
-		}		
 		return false;
 	}
 
@@ -529,8 +521,7 @@ public class Engine implements GameConstants{
 				//Izabiramo figuru igraca koji je na potezu i vracamo njene moguce poteze
 				selFigure = new Point(i, j);
 				//Lista polja na koje figura moze da skoci
-				List<Point> lista = (ArrayList<Point>) board[i][j].possibleMoves(i, j);
-				
+				List<Point> lista = board[i][j].possibleMoves(i, j);
 				//Kreiramo listu koja ce sadrzati validne poteze figure
 				List<Point> possibleMovies = new ArrayList<Point>(); 
 				
@@ -591,4 +582,127 @@ public class Engine implements GameConstants{
 			return new ArrayList<Point>();
 	}
 	
+	/**
+	 * Provetrava da li je prosledjena pozicija u okviru table
+	 * @param x
+	 * @param y
+	 * @return boolean
+	 */
+	public boolean inTable(Point point){
+		if((point.getX() > -1 && point.getX() < GameConstants.BOARD_SIZE) && (point.getY() > -1 && point.getY() < GameConstants.BOARD_SIZE))
+			return true;
+		return false;
+	}
+	
+	public boolean inTable(int x,int y){
+		if((x > -1 && x < GameConstants.BOARD_SIZE) && (y > -1 && y < GameConstants.BOARD_SIZE))
+			return true;
+		return false;
+	}
+	
+	public boolean validPosition(Point point){
+		int x = point.getX(), y = point.getY();
+		if(inTable(point) && (board[x][y] == null || (board[x][y] != null && board[x][y].getTeam() != onMove)))
+			return true;
+		return false;
+	}
+	
+	public boolean validPosition(int x, int y){
+		if(inTable(x,y) && (board[x][y] == null || (x < GameConstants.BOARD_SIZE && board[x][y] != null && board[x][y].getTeam() != onMove)))
+			return true;
+		return false;
+	}
+	
+	public Point getKingsPos(int team){
+		for(int i=0;i<GameConstants.BOARD_SIZE;i++)
+			for(int j=0; j<GameConstants.BOARD_SIZE;j++)
+				if(board[i][j] instanceof King && board[i][j].getTeam() == team)
+					return new Point(i,j);
+		return new Point(-1,-1);
+	}
+	
+	private boolean isAttacked(Point poistion){
+		for (int i = 0; i < GameConstants.BOARD_SIZE; i++) {
+			for (int j = 0; j < GameConstants.BOARD_SIZE; j++) {
+				if(board[i][j] != null && board[i][j].getTeam() != onMove && Point.exists(poistion,board[i][j].possibleMoves(i, j)))
+					return true;
+			}
+		}		
+		return false;
+	}
+	
+	//Da li polju preti neka figura\\
+	public boolean isAttackedKing(Point position){
+		int x = position.getX(), y = position.getY();
+		boolean ind = false;
+		
+		//Proverava za sve pravce
+		for (Directions direction : Directions.getDirections()) {
+			ind = ind || checkDirection(x, y, direction);
+		}
+		
+		// TODO => Ovaj deo mozda uradimmalo lepse
+		if(onMove == TEAM_WHITE){
+			if((validPosition(x-1, y-1) && board[x-1][y-1] instanceof Pawn)
+				|| (validPosition(x-1,y+1) && board[x-1][y+1] instanceof Pawn)){
+				return true;	
+			}
+			
+		} else {
+			if((validPosition(x+1, y-1) && board[x+1][y-1] instanceof Pawn)
+				|| (validPosition(x+1, y+1) && board[x+1][y+1] instanceof Pawn))
+			return true;
+		}
+		
+		// Provera za konja
+		List<Point> list = Knight.generateCheckPoints(x, y);
+		for (Point point : list) {
+			if(inTable(point) && board[point.getX()][point.getY()] instanceof Knight && board[point.getX()][point.getY()].getTeam()!=onMove)
+				return true;
+		}
+		
+		//Provera za kralja
+		list = King.generateCheckPoints(x, y);
+		for (Point point : list) {
+			if(inTable(point) && board[point.getX()][point.getY()] instanceof King && board[point.getX()][point.getY()].getTeam()!=onMove)
+				return true;
+		}
+		return ind;
+	}
+	
+	private boolean checkDirection(int x,int y, Directions direction){
+		ChessPiece piece;
+		int inc_x = direction.getX(), inc_y = direction.getY(); 
+		x += inc_x; y += inc_y; // uzima prvu poziciju setnje
+		while(inTable(new Point(x,y))) {
+			piece = board[x][y];
+			if(piece != null) { // Ako je naisao na figuru
+				if(piece.getTeam()!=onMove){
+					switch (direction) {
+					// Prvo provere za figure koje idu dijagonalno
+					case UP_LEFT:
+					case UP_RIGHT:
+					case DOWN_LEFT:
+					case DOWN_RIGHT:
+						if(piece instanceof Queen || piece instanceof Bishop)
+							return true;
+						break;
+					//Figure koje idu pravo
+					case UP:
+					case DOWN:
+					case LEFT:
+					case RIGHT:
+						if(piece instanceof Queen || piece instanceof Rook)
+							return true;
+						break;
+					}
+					
+				} 
+				// Provera za kralja
+				break;
+			}
+			x += inc_x; y += inc_y; // pomera na sledecu poziciju setnje
+		}
+		return false;
+	}
 }

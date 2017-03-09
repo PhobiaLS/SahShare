@@ -8,7 +8,7 @@ import game.*;
 import geometry.*;
 
 /**
- * @author Phobia
+ * @author lazar.stefanovic
  *
  */
 public abstract class ChessPiece implements Serializable{
@@ -23,7 +23,7 @@ public abstract class ChessPiece implements Serializable{
 		this.team = team;
 	}
 	
-	public abstract List<Point> possibleMoves(int i, int j);
+	public abstract List<Point> possibleMoves(int x, int y);
 	
 	public String getImage() {
 		return image;
@@ -44,12 +44,12 @@ public abstract class ChessPiece implements Serializable{
 	 * @return ArrayList<Point>
 	 */
 	final protected ArrayList<Point> directionalWalk(int x,int y, Directions direction){
-		int inc_x = direction.getX(), inc_y = direction.getY();  
 		ArrayList<Point> list = new ArrayList<>();
 		ChessPiece[][] board = game.getBoard(); // uzima tablu 
-		x -= inc_x; y -= inc_y; // uzima prvu poziciju setnje
-		//
-		while((x > -1 && x < GameConstants.BOARD_SIZE) && (y > -1 && y < GameConstants.BOARD_SIZE)){
+		int inc_x = direction.getX(), inc_y = direction.getY();  
+		x += inc_x; y += inc_y; // uzima prvu poziciju setnje
+
+		while(game.inTable(new Point(x,y))){
 			if(board[x][y]==null){
 				list.add(new Point(x, y));
 			} else {
@@ -57,7 +57,7 @@ public abstract class ChessPiece implements Serializable{
 					list.add(new Point(x, y));
 				break;
 			}
-			x -= inc_x; y -= inc_y; // pomera na sledecu poziciju setnje
+			x += inc_x; y += inc_y; // pomera na sledecu poziciju setnje
 		}
 		
 		return list;

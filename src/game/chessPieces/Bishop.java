@@ -18,13 +18,12 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	public ArrayList<Point> possibleMoves(int i, int j) {
+	public ArrayList<Point> possibleMoves(int x, int y) {
 		ArrayList<Point> lista = new ArrayList<Point>();
 		
-		lista.addAll(directionalWalk(i, j, Directions.UP_LEFT));
-		lista.addAll(directionalWalk(i, j, Directions.UP_RIGHT));
-		lista.addAll(directionalWalk(i, j, Directions.DOWN_LEFT));
-		lista.addAll(directionalWalk(i, j, Directions.DOWN_RIGHT));
+		for (Directions direction : Directions.getDiagonal()) {
+			lista.addAll(directionalWalk(x, y, direction));
+		}
 		
 		return lista;
 	}
