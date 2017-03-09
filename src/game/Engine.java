@@ -40,10 +40,10 @@ public class Engine implements GameConstants{
 		board = new ChessPiece[8][8];
 		
 		for (int i = 2; i < 6; i++)
-			for (int j = 0; j < 8; j++)
+			for (int j = 0; j < GameConstants.BOARD_SIZE; j++)
 				board[i][j] = null;
 		
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < GameConstants.BOARD_SIZE; i++) {
 			board[1][i] = new Pawn(-1);
 			board[6][i] = new Pawn(1);		
 		}
@@ -109,7 +109,7 @@ public class Engine implements GameConstants{
 	//Da li je figura pomerana od pocetka partije\\
 	private boolean isMoved(Point figPosition){
 		for (int i = 0; i < moves.size(); i++) {
-			if(moves.get(i).getFrom().getI() == figPosition.getI() && moves.get(i).getFrom().getJ() == figPosition.getJ())
+			if(moves.get(i).getFrom().getX() == figPosition.getY() && moves.get(i).getFrom().getY() == figPosition.getY())
 				return true;
 		}
 		return false;
@@ -117,8 +117,8 @@ public class Engine implements GameConstants{
 	
 	//Da li polju preti neka figura\\
 	private boolean isAttacked(Point poistion){
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board.length; j++) {
+		for (int i = 0; i < GameConstants.BOARD_SIZE; i++) {
+			for (int j = 0; j < GameConstants.BOARD_SIZE; j++) {
 				if(board[i][j] != null && board[i][j].getTeam() != onMove && Point.exists(poistion,board[i][j].possibleMoves(i, j)))
 					return true;
 			}
@@ -185,12 +185,12 @@ public class Engine implements GameConstants{
 	//Proverava da li moze da se odigra potez EnPasant, ako ne moze vraca NULL\\
 	private Point mozeEnPassant(int i, int j){
 		if ((board[i][j].getTeam() == 1 && i == 3) || (board[i][j].getTeam()==-1 && i == 4)){
-			if((j-1 > -1 && board[i][j-1] instanceof Pawn) || (j+1<8 && board[i][j+1] instanceof Pawn)){
+			if((j-1 > -1 && board[i][j-1] instanceof Pawn) || (j+1<GameConstants.BOARD_SIZE && board[i][j+1] instanceof Pawn)){
 				Point from = getLastMove().getFrom();
 				Point to = getLastMove().getTo();
-				if(board[to.getI()][to.getJ()] instanceof Pawn && Math.abs(from.getI() - to.getI()) == 2)
-						if(Math.abs(to.getJ()-j)==1)//ako je skocio dva polja i to je pored naseg pijuna
-							return	new Point(to.getI()-board[i][j].getTeam(), to.getJ());
+				if(board[to.getX()][to.getY()] instanceof Pawn && Math.abs(from.getX() - to.getX()) == 2)
+						if(Math.abs(to.getY()-j)==1)//ako je skocio dva polja i to je pored naseg pijuna
+							return	new Point(to.getX()-board[i][j].getTeam(), to.getY());
 				
 			}
 		} 
@@ -220,8 +220,8 @@ public class Engine implements GameConstants{
 	}
 
 	private void makeMove(Point from,Point to) throws Promotion {
-		int fromi = from.getI(),fromj = from.getJ();
-		int toi = to.getI(), toj = to.getJ();
+		int fromi = from.getX(),fromj = from.getY();
+		int toi = to.getX(), toj = to.getY();
 		if (board[fromi][fromj] instanceof King && Math.abs(fromj-toj)==2) {
 			playRokada(toi,toj);
 		} else {
@@ -268,16 +268,16 @@ public class Engine implements GameConstants{
 		}
 
 		board[i][j] = fig;
-		board[selFigure.getI()][selFigure.getJ()] = null;
+		board[selFigure.getX()][selFigure.getY()] = null;
 
-		moves.add(new Move(new Point(selFigure.getI(), selFigure.getJ()), new Point(i, j), new Pawn(onMove), cloneFigure(board[i][j])));
+		moves.add(new Move(new Point(selFigure.getX(), selFigure.getY()), new Point(i, j), new Pawn(onMove), cloneFigure(board[i][j])));
 		attackers.clear();
 		onMove *= -1;
 	}
 	
 	public void playMove(Point position) throws Promotion{
 		if(selFigure != null)
-			makeMove(new Point(selFigure.getI(), selFigure.getJ()), position);
+			makeMove(new Point(selFigure.getX(), selFigure.getY()), position);
 	}
 	
 	public void interpretMove(Move move){
@@ -285,17 +285,17 @@ public class Engine implements GameConstants{
 		Point to = move.getTo();
 		ChessPiece toFig = move.getToFig();
 		try {
-			makeMove(new Point(from.getI(), from.getJ()), new Point(to.getI(), to.getJ()));
+			makeMove(new Point(from.getX(), from.getY()), new Point(to.getX(), to.getY()));
 		} catch (Promotion e) {
 			if(toFig instanceof Bishop)
-				zamena(to.getI(), to.getJ(), 1);
+				zamena(to.getX(), to.getY(), 1);
 			else if(toFig instanceof Knight)
-				zamena(to.getI(), to.getJ(), 2);
+				zamena(to.getX(), to.getY(), 2);
 			else if(toFig instanceof Queen)
-				zamena(to.getI(), to.getJ(), 3);
+				zamena(to.getX(), to.getY(), 3);
 			else if(toFig instanceof Rook)
-				zamena(to.getI(), to.getJ(), 4);
-			board[from.getI()][from.getJ()] = null;
+				zamena(to.getX(), to.getY(), 4);
+			board[from.getX()][from.getY()] = null;
 		}
 	}
 	
@@ -351,46 +351,46 @@ public class Engine implements GameConstants{
 		//Dodajemo poziciju napadaca
 		attackPath.add(attackerPosition);
 		//Ako nije konj oonda ima jos neko polje na koje moze da se stane, da se blokira sah
-		if(!(board[attackerPosition.getI()][attackerPosition.getJ()] instanceof Knight)){
-			if(attackerPosition.getI()==figurePosition.getI()){//Napada Horizontalno
-				if(attackerPosition.getJ()<figurePosition.getJ()){//napada sa leva na desno 
-					for (int i = attackerPosition.getJ(); i < figurePosition.getJ(); i++) {
-						attackPath.add(new Point(attackerPosition.getI(), i));
+		if(!(board[attackerPosition.getX()][attackerPosition.getY()] instanceof Knight)){
+			if(attackerPosition.getX()==figurePosition.getX()){//Napada Horizontalno
+				if(attackerPosition.getY()<figurePosition.getY()){//napada sa leva na desno 
+					for (int i = attackerPosition.getY(); i < figurePosition.getY(); i++) {
+						attackPath.add(new Point(attackerPosition.getX(), i));
 					}
 				} else {//napada sa desna na levo
-					for (int i = figurePosition.getJ(); i < attackerPosition.getJ(); i++) {
-						attackPath.add(new Point(attackerPosition.getI(), i));
+					for (int i = figurePosition.getY(); i < attackerPosition.getY(); i++) {
+						attackPath.add(new Point(attackerPosition.getX(), i));
 					}
 				}
-			} else if(attackerPosition.getJ()==figurePosition.getJ()){//Napada Vertikalno
-				if(attackerPosition.getI()<figurePosition.getI()){//Napada na dole
-					for (int i = attackerPosition.getI(); i < figurePosition.getI(); i++) {
-						attackPath.add(new Point(i, attackerPosition.getJ()));
+			} else if(attackerPosition.getY()==figurePosition.getY()){//Napada Vertikalno
+				if(attackerPosition.getX()<figurePosition.getX()){//Napada na dole
+					for (int i = attackerPosition.getX(); i < figurePosition.getX(); i++) {
+						attackPath.add(new Point(i, attackerPosition.getY()));
 					}
 				} else {//Napada na gore
-					for (int i = figurePosition.getI()+1; i < attackerPosition.getI(); i++) {
-						attackPath.add(new Point(i, attackerPosition.getJ()));
+					for (int i = figurePosition.getX()+1; i < attackerPosition.getX(); i++) {
+						attackPath.add(new Point(i, attackerPosition.getY()));
 					}
 				}
 			} else {//Napada Dijagnoalno
-				if(attackerPosition.getI()<figurePosition.getI()){//Napada na dole				
-					if(attackerPosition.getJ()<figurePosition.getJ()){
-						for (int i = 0; i < (figurePosition.getJ()-attackerPosition.getJ()); i++) {//Napada Desno 
-							attackPath.add(new Point(attackerPosition.getI()+i, attackerPosition.getJ()+i));
+				if(attackerPosition.getX()<figurePosition.getX()){//Napada na dole				
+					if(attackerPosition.getY()<figurePosition.getY()){
+						for (int i = 0; i < (figurePosition.getY()-attackerPosition.getY()); i++) {//Napada Desno 
+							attackPath.add(new Point(attackerPosition.getX()+i, attackerPosition.getY()+i));
 						}
 					} else {
-						for (int i = 0; i < (attackerPosition.getJ() - figurePosition.getJ()); i++) {//Napada Levo
-							attackPath.add(new Point(attackerPosition.getI()+i, attackerPosition.getJ()-i));
+						for (int i = 0; i < (attackerPosition.getY() - figurePosition.getY()); i++) {//Napada Levo
+							attackPath.add(new Point(attackerPosition.getX()+i, attackerPosition.getY()-i));
 						}
 					}
 				} else {//Napada na gore
-					if(attackerPosition.getJ()<figurePosition.getJ()){
-						for (int i = 0; i < (figurePosition.getJ()-attackerPosition.getJ()); i++) {//Napada Desno
-							attackPath.add(new Point(attackerPosition.getI()-i, attackerPosition.getJ()+i));
+					if(attackerPosition.getY()<figurePosition.getY()){
+						for (int i = 0; i < (figurePosition.getY()-attackerPosition.getY()); i++) {//Napada Desno
+							attackPath.add(new Point(attackerPosition.getX()-i, attackerPosition.getY()+i));
 						}
 					} else {
-						for (int i = 0; i < (attackerPosition.getJ()-figurePosition.getJ()); i++) {//Napada Levo
-							attackPath.add(new Point(attackerPosition.getI()-i, attackerPosition.getJ()-i));
+						for (int i = 0; i < (attackerPosition.getY()-figurePosition.getY()); i++) {//Napada Levo
+							attackPath.add(new Point(attackerPosition.getX()-i, attackerPosition.getY()-i));
 						}
 					}
 				}
@@ -403,15 +403,15 @@ public class Engine implements GameConstants{
 	private boolean proveri(Point kingPos,Point sPos, Point nPos,List<Point> protivFigure){
 		boolean ind = false;
 		//Privremeno pomera figuru
-		ChessPiece fig = board[nPos.getI()][nPos.getJ()];
-		board[nPos.getI()][nPos.getJ()] = board[sPos.getI()][sPos.getJ()];
-		board[sPos.getI()][sPos.getJ()] = null;
+		ChessPiece fig = board[nPos.getX()][nPos.getY()];
+		board[nPos.getX()][nPos.getY()] = board[sPos.getX()][sPos.getY()];
+		board[sPos.getX()][sPos.getY()] = null;
 		//Ako kralj nema napadaca posle pomeranja figure, figura moze da stane na to mesto
 		if(getAttackers(kingPos,protivFigure).size() == 0) 
 			ind = true;
 		//Vracamo figuru na staru poziciju
-		board[sPos.getI()][sPos.getJ()] = board[nPos.getI()][nPos.getJ()];
-		board[nPos.getI()][nPos.getJ()] = fig;	
+		board[sPos.getX()][sPos.getY()] = board[nPos.getX()][nPos.getY()];
+		board[nPos.getX()][nPos.getY()] = fig;	
 		return ind;
 	}
 	
@@ -422,8 +422,8 @@ public class Engine implements GameConstants{
 		//provera da li je na udaru neke figure i ako jeste uzmi njenu poziciju
 		//Na udaru je ako se nalazi u listi pozicija na koje figura moze da skoci (figre.possibleMoves(i,j);)
 		for (int i = 0; i < protivFigure.size(); i++) {
-			if(Point.exists(figurePostition,board[protivFigure.get(i).getI()][protivFigure.get(i).getJ()].possibleMoves(protivFigure.get(i).getI(),protivFigure.get(i).getJ())))
-				attackers.add(new Point(protivFigure.get(i).getI(),protivFigure.get(i).getJ()));
+			if(Point.exists(figurePostition,board[protivFigure.get(i).getX()][protivFigure.get(i).getY()].possibleMoves(protivFigure.get(i).getX(),protivFigure.get(i).getY())))
+				attackers.add(new Point(protivFigure.get(i).getX(),protivFigure.get(i).getY()));
 		}
 		return attackers;
 	}
@@ -438,8 +438,8 @@ public class Engine implements GameConstants{
 			//Protivnicke figure
 			List<Point> protivFigure = new ArrayList<>();
 			//Raspored Figura
-			for (int i = 0; i < board.length; i++) 
-				for (int j = 0; j < board.length; j++) 
+			for (int i = 0; i < GameConstants.BOARD_SIZE; i++) 
+				for (int j = 0; j < GameConstants.BOARD_SIZE; j++) 
 					if(board[i][j] != null){
 						if(board[i][j].getTeam()==onMove){
 							if(board[i][j] instanceof King )
@@ -460,9 +460,9 @@ public class Engine implements GameConstants{
 				throw new Draw();
 			}
 			//Da li kralj moze da se pomera
-			if(board[king.getI()][king.getJ()].possibleMoves(king.getI(), king.getJ()).size()>0){
+			if(board[king.getX()][king.getY()].possibleMoves(king.getX(), king.getY()).size()>0){
 				//Dodajemo kralja jer ima gde da se pomeri
-				movFigures.add(new Point(king.getI(), king.getJ()));
+				movFigures.add(new Point(king.getX(), king.getY()));
 			} else {
 				//Ako se desi da kralj ne moze da se pomeri i ima vise napadaca, onda je automatski sahmat
 				if(attackers.size()>1)
@@ -477,32 +477,32 @@ public class Engine implements GameConstants{
 				List<Point> posMov;
 				for (int i = 0; i < mojeFigure.size(); i++) {
 					//Uzimam sve moguce pozicije na koje igraceva figura moze da stane
-					posMov = board[mojeFigure.get(i).getI()][mojeFigure.get(i).getJ()].possibleMoves(mojeFigure.get(i).getI(), mojeFigure.get(i).getJ());
+					posMov = board[mojeFigure.get(i).getX()][mojeFigure.get(i).getY()].possibleMoves(mojeFigure.get(i).getX(), mojeFigure.get(i).getY());
 					//Dodajem samo figure koje mogu da se isprece, ili pojedu figuru koja napada kralja
 					for (int j = 0; j < attackingPath.size(); j++) {
 						//Ako se neka od pozicija putanje napada nalazi u nizu mogucih poteza figure
 						//dodaj figuru u listu mogucih figura
 						if(Point.exists(attackingPath.get(j), posMov)){
-							movFigures.add(new Point(mojeFigure.get(i).getI(), mojeFigure.get(i).getJ()));
+							movFigures.add(new Point(mojeFigure.get(i).getX(), mojeFigure.get(i).getY()));
 							break;
 						}	
 					}
 				}
 				//Ako kralj nema gde da se pomeri, i ni jedna druga figura ne moze da otkloni sah
 				//baca se izuzetak Checkmate koji oznacava sahmat
-				if(board[king.getI()][king.getJ()].possibleMoves(king.getI(), king.getJ()).size()==0 && movFigures.size()==0)
+				if(board[king.getX()][king.getY()].possibleMoves(king.getX(), king.getY()).size()==0 && movFigures.size()==0)
 						throw new Checkmate();
 			
 			} else if(attackers.size()==0){//Ako kralj nije napadnut
 				//Dodaj samo figure koje mogu da se pomeraju, a njihovim pomeranjem ne moze da se ugrozi kralj
 				
 				for (int i = 0; i < mojeFigure.size(); i++) {
-					List<Point> pos = board[mojeFigure.get(i).getI()][mojeFigure.get(i).getJ()].possibleMoves(mojeFigure.get(i).getI(), mojeFigure.get(i).getJ());
+					List<Point> pos = board[mojeFigure.get(i).getX()][mojeFigure.get(i).getY()].possibleMoves(mojeFigure.get(i).getX(), mojeFigure.get(i).getY());
 					if(pos.size()>0){
 						//Ako bar jedno pomeranje ne izaziva sah, dodaj figuru u listu pomerajucih figura
 						for (int j = 0; j < pos.size(); j++) {
-							if(proveri(king, new Point(mojeFigure.get(i).getI(),mojeFigure.get(i).getJ()), pos.get(j),protivFigure)){
-									movFigures.add(new Point(mojeFigure.get(i).getI(),mojeFigure.get(i).getJ()));
+							if(proveri(king, new Point(mojeFigure.get(i).getX(),mojeFigure.get(i).getY()), pos.get(j),protivFigure)){
+									movFigures.add(new Point(mojeFigure.get(i).getX(),mojeFigure.get(i).getY()));
 									break;
 							}
 						}
@@ -510,7 +510,7 @@ public class Engine implements GameConstants{
 				}
 				
 				//Ako kralj nema gde da se pomeri i ni jedna figura ne moze da se pomeri, onda je nereseno
-				if(board[king.getI()][king.getJ()].possibleMoves(king.getI(), king.getJ()).size()==0 && movFigures.size()==0)
+				if(board[king.getX()][king.getY()].possibleMoves(king.getX(), king.getY()).size()==0 && movFigures.size()==0)
 						throw new Draw();
 				
 			} else {//ako ga napada vise od jedne figure
@@ -557,8 +557,8 @@ public class Engine implements GameConstants{
 					//Uzimamo mesto kralja i protivnicke figure
 					Point king = null;
 					List<Point> protivFigure = new ArrayList<>();
-					for (int k = 0; k < board.length; k++) {
-						for (int k2 = 0; k2 < board.length; k2++) {
+					for (int k = 0; k < GameConstants.BOARD_SIZE; k++) {
+						for (int k2 = 0; k2 < GameConstants.BOARD_SIZE; k2++) {
 							if(board[k][k2] != null && board[k][k2].getTeam()==onMove && board[k][k2] instanceof King){
 								king = new Point(k, k2);
 							} else if(board[k][k2] != null && board[k][k2].getTeam()!=onMove)

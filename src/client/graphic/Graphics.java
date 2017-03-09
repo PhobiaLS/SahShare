@@ -1618,7 +1618,7 @@ public class Graphics extends Application implements GameConstants {
 		vBox2.setBackground(new Background(new BackgroundFill(graphicLogic.getTheme().getBoardBorderColor(), CornerRadii.EMPTY, Insets.EMPTY)));
 		BorderPane.setMargin(vBox2, new Insets(0, 15, 0, 0));
 		
-		for (int i = numbers.length() - 1; i >= 0; i--) {
+		for (int i = numbers.length() - 1; i > -1; i--) {
 			Label l1 = new Label(numbers.substring(i, i + 1));
 			vBox1.getChildren().add(l1);
 			l1.setPrefHeight(55);
@@ -1638,8 +1638,8 @@ public class Graphics extends Application implements GameConstants {
 		GridPane buttonsPane = new GridPane();
 		Image img;
 		ImageView imgV;
-		for (int i = 0; i < 8; i++)
-			for (int j = 0; j < 8; j++) {
+		for (int i = 0; i < GameConstants.BOARD_SIZE; i++)
+			for (int j = 0; j < GameConstants.BOARD_SIZE; j++) {
 				buttonsChess[i][j] = new ChessButton(i, j, game);
 				buttonsChess[i][j].setPrefSize(55, 55);
 				buttonsChess[i][j].setMinSize(55, 55);
@@ -1716,8 +1716,8 @@ public class Graphics extends Application implements GameConstants {
 					} else {
 						refreshGUIBoard(prStage);
 						for (int k = 0; k < list.size(); k++) {
-							buttonsChess[list.get(k).getI()][list.get(k).getJ()].setBackground(new Background(new BackgroundFill(graphicLogic.getTheme().getPossibleMovesColor(), CornerRadii.EMPTY, Insets.EMPTY)));
-							buttonsChess[list.get(k).getI()][list.get(k).getJ()].setDisable(false);
+							buttonsChess[list.get(k).getX()][list.get(k).getY()].setBackground(new Background(new BackgroundFill(graphicLogic.getTheme().getPossibleMovesColor(), CornerRadii.EMPTY, Insets.EMPTY)));
+							buttonsChess[list.get(k).getX()][list.get(k).getY()].setDisable(false);
 						}
 					}
 				});
@@ -1725,8 +1725,8 @@ public class Graphics extends Application implements GameConstants {
 		
 		int ind = 1;
 		int colorI = 1;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
+		for (int i = 0; i < GameConstants.BOARD_SIZE; i++) {
+			for (int j = 0; j < GameConstants.BOARD_SIZE; j++) {
 				if (colorI % 2 == 0)
 					buttonsChess[i][j].setBackground(new Background(new BackgroundFill(graphicLogic.getTheme().getBlackFieldColor(), CornerRadii.EMPTY, Insets.EMPTY)));
 				else
@@ -1873,8 +1873,8 @@ public class Graphics extends Application implements GameConstants {
 	private void refreshGUIBoard(Stage prStage) {
 		int i;
 		int j;
-		for (i = 0; i < 8; i++)
-			for (j = 0; j < 8; j++) {
+		for (i = 0; i < GameConstants.BOARD_SIZE; i++)
+			for (j = 0; j < GameConstants.BOARD_SIZE; j++) {
 				buttonsChess[i][j].setGraphic(new ImageView(game.getFigureImage(i, j)));
 				if ((i * 8 + j + i % 2) % 2 == 0)
 					buttonsChess[i][j].setBackground(new Background(new BackgroundFill(graphicLogic.getTheme().getWhiteFieldColor(), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -1887,7 +1887,7 @@ public class Graphics extends Application implements GameConstants {
 			int k = 0;
 			List<Point> points = game.getMovableFigures();
 			while (k < points.size()) {
-				buttonsChess[points.get(k).getI()][points.get(k).getJ()].setDisable(false);
+				buttonsChess[points.get(k).getX()][points.get(k).getY()].setDisable(false);
 				k++;
 			}
 		} catch (Draw e) {

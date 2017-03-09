@@ -1,43 +1,42 @@
 package geometry;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Point implements Serializable {
 	
 	private static final long serialVersionUID = 7000736698499772936L;
-	private  int i;
-	private  int j;
+	private  int x;
+	private  int y;
 	
-	public Point(int i, int j) {
-		this.i = i;
-		this.j = j;
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	@Override
 	public boolean equals(Object obj){
-		if (((Point)obj).getI() == i && ((Point)obj).getJ() == j)
+		if (((Point)obj).getX() == x && ((Point)obj).getY() == y)
 			return true;
 		return false;
 	}
 
-	public int getI() {
-		return i;
+	public int getX() {
+		return x;
 	}
 
-	public int getJ() {
-		return j;
+	public int getY() {
+		return y;
 	}
 	
 	public static boolean exists(Point p, List<Point> list) {
-		for (int ii = 0; ii < list.size(); ii++)
-			if (p.equals(list.get(ii)))
+		for (int i = 0; i < list.size(); i++)
+			if (p.equals(list.get(i)))
 				return true;
 		return false;
 	}
 	
 	public String toString(){
-		return (i + " " + j);
+		return (x + " " + y);
 	}
 }

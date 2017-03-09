@@ -17,4 +17,5 @@ public interface GameConstants {
 	public static int FIGURE_KING = 5;
 	public static int FIGURE_PAWN = 6;
 	
+	public static int BOARD_SIZE = 8;
 }

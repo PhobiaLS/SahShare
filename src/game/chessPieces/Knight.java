@@ -1,13 +1,26 @@
 package game.chessPieces;
 
 import geometry.Point;
-
 import java.util.ArrayList;
+import java.util.List;
+import game.GameConstants;
 
+/**
+ * @author lazar.stefanovic
+ *
+ */
+/**
+ * @author lazar.stefanovic
+ *
+ */
+/**
+ * @author lazar.stefanovic
+ *
+ */
 public class Knight extends ChessPiece {
 
 	private static final long serialVersionUID = 9166826962036919559L;
-
+	
 	public Knight(int team) {
 		super(team);
 		
@@ -18,38 +31,55 @@ public class Knight extends ChessPiece {
 	}
 
 	@Override
-	public ArrayList<Point> possibleMoves(int i, int j) {
-		ArrayList<Point> lista = new ArrayList<Point>();
-		ChessPiece[][] board = game.getBoard();
-		if(i+2<8){
-			if(j+1<8 && (board[i+2][j+1]==null || (board[i+2][j+1]!=null && board[i+2][j+1].getTeam()!=team)))
-				lista.add(new Point(i+2, j+1));
-			
-			if(j-1>-1 && (board[i+2][j-1]==null || (board[i+2][j-1]!=null && board[i+2][j-1].getTeam()!=team)))
-				lista.add(new Point(i+2, j-1));
-		}
-		if(i+1<8){
-			if(j+2<8 && (board[i+1][j+2]==null || (board[i+1][j+2]!=null && board[i+1][j+2].getTeam()!=team)))
-				lista.add(new Point(i+1, j+2));
-			
-			if(j-2>-1 && (board[i+1][j-2]==null || (board[i+1][j-2]!=null && board[i+1][j-2].getTeam()!=team)))
-				lista.add(new Point(i+1, j-2));
-		}
-		if(i-2>-1){
-			if(j+1<8 && (board[i-2][j+1]==null || (board[i-2][j+1]!=null && board[i-2][j+1].getTeam()!=team)))
-				lista.add(new Point(i-2, j+1));
-			
-			if(j-1>-1 && (board[i-2][j-1]==null || (board[i-2][j-1]!=null && board[i-2][j-1].getTeam()!=team)))
-				lista.add(new Point(i-2, j-1));
-		}
-		if(i-1>-1){
-			if(j+2<8 && (board[i-1][j+2]==null || (board[i-1][j+2]!=null && board[i-1][j+2].getTeam()!=team)))
-				lista.add(new Point(i-1, j+2));
-			
-			if(j-2>-1 && (board[i-1][j-2]==null || (board[i-1][j-2]!=null && board[i-1][j-2].getTeam()!=team)))
-				lista.add(new Point(i-1, j-2));
-		}
-		return lista;
+	public List<Point> possibleMoves(int x, int y) {
+		List<Point> list = new ArrayList<Point>();
+		for (Point point : generateCheckPoints(x,y)) {
+			if(checker(point.getX(), point.getY()))
+				list.add(point);
+		}	
+		return list;
 	}
-
+	
+	
+	/**
+	 * Proverava da li je pozicija validna
+	 * @param x
+	 * @param y
+	 * @return boolean
+	 */
+	private boolean checker(int x, int y){
+		ChessPiece[][] board = game.getBoard();
+		if(board[x][y]==null || (board[x][y]!=null && board[x][y].getTeam()!=team))
+			return true;
+		return false;
+	}
+	
+	/**
+	 * Za sad cu ovako, mozad budem promenio da se inkremeteri pamet u neki niz, ida se
+	 * onda prolazi kroz niz i ispituje svaka pozicija posle inkrementacije
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private List<Point> generateCheckPoints(int x, int y){
+		List<Point> list = new ArrayList<Point>();
+		if((x+2 > -1 && x+2 < GameConstants.BOARD_SIZE) && (y+1 > -1 && y+1 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x+2, y+1));
+		if((x+2 > -1 && x+2 < GameConstants.BOARD_SIZE) && (y-1 > -1 && y-1 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x+2, y+1));
+		if((x+1 > -1 && x+1 < GameConstants.BOARD_SIZE) && (y+2 > -1 && y+2 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x+1, y+2));
+		if((x+1 > -1 && x+1 < GameConstants.BOARD_SIZE) && (y-2 > -1 && y-2 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x+1, y-2));
+		if((x-2 > -1 && x-2 < GameConstants.BOARD_SIZE) && (y+1 > -1 && y+1 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x-2, y+1));
+		if((x-2 > -1 && x-2 < GameConstants.BOARD_SIZE) && (y-1 > -1 && y-1 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x-2, y-1));
+		if((x-1 > -1 && x-1 < GameConstants.BOARD_SIZE) && (y+2 > -1 && y+2 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x-1, y+2));
+		if((x-1 > -1 && x-1 < GameConstants.BOARD_SIZE) && (y-2 > -1 && y-2 < GameConstants.BOARD_SIZE))
+			list.add(new Point(x-1, y-2));
+		return list;
+	}
+	
 }

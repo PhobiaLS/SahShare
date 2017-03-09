@@ -1,8 +1,6 @@
 package bot;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
@@ -31,7 +29,7 @@ public class Bot {
 		try {
 			moveableFigures = engine.getMovableFigures();//Uzima neku figuru koja moze da se pomera
 			figura = moveableFigures.get(randomize(moveableFigures.size()));
-			List<Point> possibleMoves = engine.getPossibleMoves(figura.getI(), figura.getJ());
+			List<Point> possibleMoves = engine.getPossibleMoves(figura.getX(), figura.getY());
 			//Uzima neku od mogucih pozicija
 			move = possibleMoves.get(randomize(possibleMoves.size()));
 			try {
@@ -52,7 +50,7 @@ public class Bot {
 					rand = GameConstants.FIGURE_ROOK;
 					break;
 				}
-				engine.zamena(move.getI(), move.getJ(), rand);
+				engine.zamena(move.getX(), move.getY(), rand);
 			}
 		} catch (Draw e1) {
 			throw new Draw();
