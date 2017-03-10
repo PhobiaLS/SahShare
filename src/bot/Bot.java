@@ -6,7 +6,6 @@ import exceptions.Draw;
 import exceptions.Promotion;
 import game.ChessPiecesEnum;
 import game.Engine;
-import game.GameConstants;
 import geometry.Point;
 
 public class Bot {

@@ -10,7 +10,7 @@ import exceptions.Promotion;
 import game.chessPieces.*;
 import bot.Bot;
 
-//  
+ 
 // TODO => Pravi novu granu i sredi engine skroz
 // 		TODO =\ Implementirati novi isAttacked
 // 		TODO (=) Uredi zagrade
@@ -27,25 +27,31 @@ public class Engine implements GameConstants{
 	private Point selFigure;
 	private int typeOfGame;
 	private Teams team;
-	private Bot bot = null;
+	private Bot bot;
 
 	private List<Point> movFigures = new ArrayList<Point>();
 	private List<Point> attackers = new ArrayList<Point>();
 	
 	public Engine(int typeOfGame,Teams team) {
-		newGame();
 		this.typeOfGame = typeOfGame;
 		this.team = team;
 		if(typeOfGame == GAME_MODE_BOTS) {
 			bot = new Bot(this);
 		}
+		newGame();
+	}
+
+	//Kreira novu igru(Inicijalizuje novu tablu i resetuje ko je na potezu)\\
+	public void newGame() {
+		newChessBoard();
+		onMove = Teams.WHITE_PLAYER;
 	}
 		
-	private void initializeBoard() {
-		board = new ChessPiece[8][8];
+	private void newChessBoard() {
+		board = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 		
-		for (int i = 2; i < 6; i++) {
-			for (int j = 0; j < GameConstants.BOARD_SIZE; j++) {
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
 				board[i][j] = null;
 			}
 		}
@@ -80,13 +86,6 @@ public class Engine implements GameConstants{
 		moves = new ArrayList<Move>();
 	}
 
-	//Kreira novu igru(Inicijalizuje novu tablu i resetuje ko je na potezu)\\
-	public void newGame() {
-		initializeBoard();
-//		ini();
-		onMove = Teams.WHITE_PLAYER;
-	}
-
 	public void invertTeam() {
 		if(onMove == Teams.WHITE_PLAYER){
 			onMove = Teams.BLACK_PLAYER;
@@ -111,9 +110,8 @@ public class Engine implements GameConstants{
 			clonedFigure = new Queen(figure.getTeam());
 		} else if(figure instanceof Rook) {
 			clonedFigure = new Rook(figure.getTeam());
-		} else { 
-			clonedFigure = null;
 		}
+		
 		return clonedFigure;
 	}
 	
@@ -134,9 +132,9 @@ public class Engine implements GameConstants{
 			if(isAttacked(new Point(7, 4))) {
 				return null;
 			}
-			if(!isMoved(new Point(7, 4)) && !isMoved(new Point(7, 7))) {
+			if((!isMoved(new Point(7, 4))) && (!isMoved(new Point(7, 7)))) {
 				for(int j=5;j<7;j++) {
-					if(board[7][j]!=null || isAttacked(new Point(7, j))) {
+					if((board[7][j]!=null) || (isAttacked(new Point(7, j)))) {
 						return null;
 					}
 				}					
@@ -146,9 +144,9 @@ public class Engine implements GameConstants{
 			if(isAttacked(new Point(0, 4))) {
 				return null;
 			}
-			if(!isMoved(new Point(0, 4)) && !isMoved(new Point(0, 7))) {
+			if((!isMoved(new Point(0, 4))) && (!isMoved(new Point(0, 7)))) {
 				for(int j=5;j<7;j++) {
-					if(board[0][j] !=null || isAttacked(new Point(0, j))) {
+					if((board[0][j] !=null) || (isAttacked(new Point(0, j)))) {
 						return null;
 					}
 				}
@@ -166,7 +164,7 @@ public class Engine implements GameConstants{
 			if(isAttacked(new Point(7, 4))) {
 				return null;
 			}
-			if(!isMoved(new Point(7, 4)) && !isMoved(new Point(7, 0))) {
+			if((!isMoved(new Point(7, 4))) && (!isMoved(new Point(7, 0)))) {
 				for(int j=1;j<4;j++) {
 					if(board[7][j]!=null || isAttacked(new Point(7, j))) {
 						return null;
@@ -227,20 +225,23 @@ public class Engine implements GameConstants{
 			moves.add(new Move(new Point(toi, 7), new Point(toi, 5), new Rook(onMove), new Rook(onMove)));
 			moves.add(new Move(new Point(toi, 4), new Point(toi, 6), new King(onMove), new King(onMove)));
 		}
-		//Ovde uneti za move kao specijalni potez//
+		//Ovde uneti za move kao specijalni potez
 	}
 
 	private void makeMove(Point from,Point to) throws Promotion {
-		int fromi = from.getX(),fromj = from.getY();
-		int toi = to.getX(), toj = to.getY();
-		if (board[fromi][fromj] instanceof King && Math.abs(fromj-toj)==2) {
+		int fromi = from.getX();
+		int fromj = from.getY();
+		int toi = to.getX();
+		int toj = to.getY();
+		
+		if ((board[fromi][fromj] instanceof King) && (Math.abs(fromj-toj)==2)) {
 			playRokada(toi,toj);
 		} else {
 			//Provera za zamenu, da li je pijun stigao do kraja ;)
 			if(board[fromi][fromj] instanceof Pawn) {
-				if(onMove == Teams.WHITE_PLAYER && (toi == 0)) {
+				if((onMove == Teams.WHITE_PLAYER) && (toi == 0)) {
 						throw new Promotion();				
-				} else if(onMove == Teams.BLACK_PLAYER && (toi == 7)) {
+				} else if((onMove == Teams.BLACK_PLAYER) && (toi == 7)) {
 						throw new Promotion();
 				} else {//Za EnPasant
 					Point p = mozeEnPassant(fromi, fromj);
@@ -307,46 +308,6 @@ public class Engine implements GameConstants{
 		}
 	}
 	
-	//-----------Geteri---------------\\
-	
-	//Vraca celu tablu\\
-	public ChessPiece[][] getBoard() {
-		return board;
-	}
-	
-	//Daje sliku figure cije su koordinate prosledjene
-	public Image getFigureImage(int i,int j) {
-		if(board[i][j] != null) {
-			return (new Image(board[i][j].getImage()));
-		} else { 
-			return null;
-		}
-	}
-	
-	//Daje ko je na potezu ( 1 - beli igrac | -1 crni igrac )\\
-	public Teams getOnMove() {
-		return onMove;
-	}
-	
-	//Daje zadnje odigrani potez (zbog slanja serveru)\\
-	public Move getLastMove() {
-		return moves.get(moves.size()-1);
-	}
-	
-	//Vraca tip igre (botovi | online)\\
-	public int getTypeOfGame() {
-		return typeOfGame;
-	}
-
-	//Vraca da li je igrac beli | crni \\
-	public Teams getTeam() {
-		return team;
-	}
-	
-	public Bot getBot() {
-		return bot;
-	}
-	
 	//Vraca putanjom kojom figura napada drugu figuru\\
 	private List<Point> getAttackingPath(Point attackerPosition,Point figurePosition) {
 		//Put kojim figura napada kralja
@@ -403,19 +364,19 @@ public class Engine implements GameConstants{
 	}
 		
 	//Proverava da li bi se figurinim pomeranjem stvorio sah\\
-	private boolean proveri(Point kingPos,Point sPos, Point nPos,List<Point> protivFigure) {
-		boolean ind = false;
+	private boolean proveri(Point kingPos,Point oldPosition, Point newPosition,List<Point> protivFigure) {
+		boolean isChec = false;
 		//Privremeno pomera figuru
-		ChessPiece fig = board[nPos.getX()][nPos.getY()];
-		board[nPos.getX()][nPos.getY()] = board[sPos.getX()][sPos.getY()];
-		board[sPos.getX()][sPos.getY()] = null;
+		ChessPiece fig = board[newPosition.getX()][newPosition.getY()];
+		board[newPosition.getX()][newPosition.getY()] = board[oldPosition.getX()][oldPosition.getY()];
+		board[oldPosition.getX()][oldPosition.getY()] = null;
 		//Ako kralj nema napadaca posle pomeranja figure, figura moze da stane na to mesto
 		if(getAttackers(kingPos).size() == 0) 
-			ind = true;
+			isChec = true;
 		//Vracamo figuru na staru poziciju
-		board[sPos.getX()][sPos.getY()] = board[nPos.getX()][nPos.getY()];
-		board[nPos.getX()][nPos.getY()] = fig;	
-		return ind;
+		board[oldPosition.getX()][oldPosition.getY()] = board[newPosition.getX()][newPosition.getY()];
+		board[newPosition.getX()][newPosition.getY()] = fig;	
+		return isChec;
 	}
 	
 	//Daje sve figure koje igrac moze da pomera, u zavisnosti da li je sah ili nije\\
@@ -604,44 +565,49 @@ public class Engine implements GameConstants{
 	 * @param y
 	 * @return boolean
 	 */
-	public boolean inTable(Point point) {
-		if((point.getX() > -1 && point.getX() < GameConstants.BOARD_SIZE) && (point.getY() > -1 && point.getY() < GameConstants.BOARD_SIZE)) {
-			return true;
-		}
-		return false;
+	public boolean isPointOnBoard(Point point) {
+		return isPointOnBoard(point.getX(),point.getY());
 	}
 	
-	public boolean inTable(int x,int y) {
+	public boolean isPointOnBoard(int x,int y) {
 		if((x > -1 && x < GameConstants.BOARD_SIZE) && (y > -1 && y < GameConstants.BOARD_SIZE)) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
+	/**
+	 * Proverava da li na prosledjenu poziciju moze da stane figura igraca koji je na potezu  
+	 * @param point
+	 * @return
+	 */
 	public boolean validPosition(Point point) {
-		int x = point.getX(), y = point.getY();
-		if(inTable(point) && (board[x][y] == null || (board[x][y] != null && board[x][y].getTeam() != onMove))) {
-			return true;
-		}
-		return false;
+		return validPosition(point.getX(), point.getY());
 	}
 	
 	public boolean validPosition(int x, int y) {
-		if(inTable(x,y) && (board[x][y] == null || (x < GameConstants.BOARD_SIZE && board[x][y] != null && board[x][y].getTeam() != onMove))) {
+		if(isPointOnBoard(x,y) && (board[x][y] == null || (x < GameConstants.BOARD_SIZE && board[x][y] != null && board[x][y].getTeam() != onMove))) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
-	public Point getKingsPos(Teams team) {
+	/**
+	 * Vraca poziciju kralja na tabli, vraca null ako ne postoji
+	 * @param team
+	 * @return Point || null
+	 */
+	public Point getKingsPosition(Teams team) {
 		for(int i=0;i<GameConstants.BOARD_SIZE;i++) {
 			for(int j=0; j<GameConstants.BOARD_SIZE;j++) {
-				if(board[i][j] instanceof King && board[i][j].getTeam() == team) {
+				if((board[i][j] instanceof King) && (board[i][j].getTeam() == team)) {
 					return new Point(i,j);
 				}
 			}
 		}
-		return new Point(-1,-1);
+		return null;
 	}
 	
 	public boolean isAttacked(Point position) {
@@ -651,7 +617,6 @@ public class Engine implements GameConstants{
 			return false;
 		}
 	}
-	
 	
 	/**
 	 * Vraca sve figure koje napadaju prosledjanu poziciju
@@ -670,32 +635,30 @@ public class Engine implements GameConstants{
 			}
 		}
 		
-		// TODO => Ovaj deo mozda uradimmalo lepse
+		// TODO => Ovaj deo mozda uradim malo lepse
 		if(onMove == Teams.WHITE_PLAYER) {
-			if((validPosition(x-1, y-1) && board[x-1][y-1] instanceof Pawn))
+			if((validPosition(x-1, y-1)) && (board[x-1][y-1] instanceof Pawn))
 				attackers.add(new Point(x-1,y-1));
-			if(validPosition(x-1,y+1) && board[x-1][y+1] instanceof Pawn) 
+			if((validPosition(x-1,y+1)) && (board[x-1][y+1] instanceof Pawn)) 
 				attackers.add(new Point(x-1,y+1));
 		} else {
-			if((validPosition(x+1, y-1) && board[x+1][y-1] instanceof Pawn))
+			if((validPosition(x+1, y-1)) && (board[x+1][y-1] instanceof Pawn))
 				attackers.add(new Point(x+1, y-1));
-			if(validPosition(x+1, y+1) && board[x+1][y+1] instanceof Pawn) {
+			if((validPosition(x+1, y+1)) && (board[x+1][y+1] instanceof Pawn)) {
 				attackers.add(new Point(x+1, y+1));
 			}
 		}
 		
 		// Provera za konja
-		List<Point> list = Knight.generateCheckPoints(x, y);
-		for (Point point : list) {
-			if(inTable(point) && board[point.getX()][point.getY()] instanceof Knight && board[point.getX()][point.getY()].getTeam() != onMove) {
+		for (Point point : Knight.generateCheckPoints(x, y)) {
+			if((isPointOnBoard(point)) && (board[point.getX()][point.getY()] instanceof Knight) && (board[point.getX()][point.getY()].getTeam() != onMove)) {
 				attackers.add(point);
 			}
 		}
 		
 		//Provera za kralja
-		list = King.generateCheckPoints(x, y);
-		for (Point point : list) {
-			if(inTable(point) && board[point.getX()][point.getY()] instanceof King && board[point.getX()][point.getY()].getTeam()!=onMove) {
+		for (Point point : King.generateCheckPoints(x, y)) {
+			if((isPointOnBoard(point)) && (board[point.getX()][point.getY()] instanceof King) && (board[point.getX()][point.getY()].getTeam()!=onMove)) {
 				attackers.add(point);
 			}
 		}
@@ -711,13 +674,15 @@ public class Engine implements GameConstants{
 	 * @return Point || NULL
 	 */
 	private Point checkDirectionAttackers(int x,int y, Directions direction) {
-		ChessPiece piece;
-		int inc_x = direction.getX(), inc_y = direction.getY(); 
-		x += inc_x; y += inc_y; // uzima prvu poziciju setnje
-		while(inTable(new Point(x,y))) {
-			piece = board[x][y];
+		int inc_x = direction.getX();
+		int inc_y = direction.getY(); 
+		x += inc_x; 
+		y += inc_y; // uzima prvu poziciju setnje
+
+		while(isPointOnBoard(new Point(x,y))) { 
+			ChessPiece piece = board[x][y];
 			if(piece != null) { // Ako je naisao na figuru
-				if(piece.getTeam()!=onMove) {
+				if(piece.getTeam() != onMove) {
 					switch (direction) {
 						// Prvo provere za figure koje idu dijagonalno
 						case UP_LEFT:
@@ -742,8 +707,47 @@ public class Engine implements GameConstants{
 				} 
 				break;
 			}
-			x += inc_x; y += inc_y; // pomera na sledecu poziciju setnje
+			x += inc_x; 
+			y += inc_y; // pomera na sledecu poziciju setnje
 		}
 		return null;
+	}
+
+	//Vraca celu tablu\\
+	public ChessPiece[][] getBoard() {
+		return board;
+	}
+
+	//Daje sliku figure cije su koordinate prosledjene
+	public Image getFigureImage(int i,int j) {
+		if(board[i][j] != null) {
+			return (new Image(board[i][j].getImage()));
+		} else { 
+			return null;
+		}
+	}
+
+	//Daje ko je na potezu ( 1 - beli igrac | -1 crni igrac )\\
+	public Teams getOnMove() {
+		return onMove;
+	}
+
+	//Daje zadnje odigrani potez (zbog slanja serveru)\\
+	public Move getLastMove() {
+		return moves.get(moves.size()-1);
+	}
+
+	//Vraca tip igre (botovi | online)\\
+	public int getTypeOfGame() {
+		return typeOfGame;
+	}
+
+	//Vraca da li je igrac beli | crni \\
+	public Teams getTeam() {
+		return team;
+	}
+
+	public Bot getBot() {
+		return bot;
 	}
 }

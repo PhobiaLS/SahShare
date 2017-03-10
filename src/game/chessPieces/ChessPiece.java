@@ -49,7 +49,7 @@ public abstract class ChessPiece implements Serializable{
 		int inc_x = direction.getX(), inc_y = direction.getY();  
 		x += inc_x; y += inc_y; // uzima prvu poziciju setnje
 
-		while(game.inTable(new Point(x,y))) {
+		while(game.isPointOnBoard(new Point(x,y))) {
 			if(board[x][y]==null) {
 				list.add(new Point(x, y));
 			} else {
