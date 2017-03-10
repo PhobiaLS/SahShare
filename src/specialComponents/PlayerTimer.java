@@ -1,15 +1,16 @@
 package specialComponents;
 
 import exceptions.TimesUp;
+import game.Teams;
 
 public class PlayerTimer {
 	private int time;
-	private int player;
+	private Teams player;
 	private int timerBeginingTime;
 	
-	public PlayerTimer(int time, int player) {
+	public PlayerTimer(int time, Teams whitePlayer) {
 		this.time = time * 60;
-		this.player = player;
+		this.player = whitePlayer;
 		this.timerBeginingTime = time;
 	}
 	
@@ -23,7 +24,7 @@ public class PlayerTimer {
 		this.time = time * 60;
 	}
 	
-	public int getPlayer() {
+	public Teams getPlayer() {
 		return player;
 	}
 	

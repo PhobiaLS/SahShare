@@ -4,6 +4,8 @@ import geometry.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.Teams;
+
 /**
  * @author lazar.stefanovic
  *
@@ -12,10 +14,10 @@ public class Knight extends ChessPiece {
 
 	private static final long serialVersionUID = 9166826962036919559L;
 	
-	public Knight(int team) {
+	public Knight(Teams team) {
 		super(team);
 		
-		if (team == 1)
+		if (team == Teams.WHITE_PLAYER)
 			image = "images/figure-icons/knight-icon-white.png";
 		else
 			image = "images/figure-icons/knight-icon-black.png";

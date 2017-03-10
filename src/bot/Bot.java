@@ -4,6 +4,7 @@ import java.util.List;
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
+import game.ChessPiecesEnum;
 import game.Engine;
 import game.GameConstants;
 import geometry.Point;
@@ -36,21 +37,22 @@ public class Bot {
 				engine.playMove(move);
 			} catch (Promotion e) {
 				int rand = randomize(4);
+				ChessPiecesEnum piece = ChessPiecesEnum.PAWN;
 				switch (rand) {
 				case 0:
-					rand = GameConstants.FIGURE_BISHOP;
+					piece = ChessPiecesEnum.BISHOP;
 					break;
 				case 1:
-					rand = GameConstants.FIGURE_KING;
+					piece = ChessPiecesEnum.KING;
 					break;
 				case 2:
-					rand = GameConstants.FIGURE_QUEEN;
+					piece = ChessPiecesEnum.QUEEN;
 					break;
 				case 3:
-					rand = GameConstants.FIGURE_ROOK;
+					piece = ChessPiecesEnum.ROOK;
 					break;
 				}
-				engine.zamena(move.getX(), move.getY(), rand);
+				engine.zamena(move.getX(), move.getY(), piece);
 			}
 		} catch (Draw e1) {
 			throw new Draw();

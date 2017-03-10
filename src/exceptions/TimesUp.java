@@ -1,5 +1,7 @@
 package exceptions;
 
+import game.Teams;
+
 public class TimesUp extends Exception {
 	
 
@@ -8,14 +10,14 @@ public class TimesUp extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = -5111439512766134499L;
-	private int player;
+	private Teams player;
 	
-	public TimesUp(int player) {
+	public TimesUp(Teams player2) {
 		super("Times up!");
-		this.player = player;
+		this.player = player2;
 	}
 
-	public int getPlayer() {
+	public Teams getPlayer() {
 		return player;
 	}
 	

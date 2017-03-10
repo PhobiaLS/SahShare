@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.Directions;
+import game.Teams;
 
 public class King extends ChessPiece {
 
 	private static final long serialVersionUID = -4371509185383365709L;
 
-	public King(int team) {
+	public King(Teams team) {
 		super(team);
-		if (team == 1) {
+		if (team == Teams.WHITE_PLAYER) {
 			image = "images/figure-icons/king-icon-white.png";
 		} else {
 			image = "images/figure-icons/king-icon-black.png";
@@ -23,7 +24,7 @@ public class King extends ChessPiece {
 	public List<Point> possibleMoves(int x, int y) {
 		List<Point> list = new ArrayList<>();
 		for (Point point : generateCheckPoints(x,y)) {
-			if(game.validPosition(point) && !game.isAttackedKing(point)) {
+			if(game.validPosition(point) && !game.isAttacked(point)) {
 				list.add(point);
 			}
 		}	

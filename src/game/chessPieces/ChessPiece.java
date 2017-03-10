@@ -16,10 +16,10 @@ public abstract class ChessPiece implements Serializable{
 	private static final long serialVersionUID = -4520361727949498133L;
 	
 	protected static Engine game;
-	protected int team;
+	protected Teams team;
 	protected String image = null;
 	
-	public ChessPiece(int team) {
+	public ChessPiece(Teams team) {
 		this.team = team;
 	}
 	
@@ -33,7 +33,7 @@ public abstract class ChessPiece implements Serializable{
 		ChessPiece.game = game;
 	}
 	
-	public int getTeam() {
+	public Teams getTeam() {
 		return team;
 	}
 

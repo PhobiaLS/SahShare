@@ -3,8 +3,10 @@ package client.graphic;
 import exceptions.Checkmate;
 import exceptions.Draw;
 import exceptions.Promotion;
+import game.ChessPiecesEnum;
 import game.Engine;
 import game.GameConstants;
+import game.Teams;
 import geometry.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -160,7 +162,7 @@ public class Graphics extends Application implements GameConstants {
 		timeline = new Timeline(new KeyFrame(
 		        Duration.millis(1000),
 		        ae -> {
-		        	if (game.getOnMove() == TEAM_WHITE) {
+		        	if (game.getOnMove() == Teams.WHITE_PLAYER) {
 		        		try {
 							playerTimer.reduce();
 							playerTimerLabel.setText(playerTimer.toString());
@@ -175,8 +177,8 @@ public class Graphics extends Application implements GameConstants {
 								Button bt1 = new Button(graphicLogic.getLanguage().getYesText());
 								bt1.setOnAction(e1 -> {
 									game.newGame();
-									playerTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), TEAM_WHITE);
-									opponentTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), TEAM_BLACK);
+									playerTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), Teams.WHITE_PLAYER);
+									opponentTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), Teams.BLACK_PLAYER);
 									timeline.play();
 									Platform.runLater(() -> {
 										refreshGUIBoard(prStage);
@@ -264,8 +266,8 @@ public class Graphics extends Application implements GameConstants {
 								Button bt1 = new Button(graphicLogic.getLanguage().getYesText());
 								bt1.setOnAction(e1 -> {
 									game.newGame();
-									playerTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), TEAM_WHITE);
-									opponentTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), TEAM_BLACK);
+									playerTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), Teams.WHITE_PLAYER);
+									opponentTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), Teams.BLACK_PLAYER);
 									timeline.play();
 									Platform.runLater(() -> {
 										refreshGUIBoard(prStage);
@@ -362,8 +364,8 @@ public class Graphics extends Application implements GameConstants {
 						lab.setOnMouseClicked(e -> {
 							if (account.getId() != pSInformation.getId()) {
 								GameRequest gameRequest = new GameRequest(account.getId(), account.getUsername(), pSInformation.getId(), pSInformation.getGameTime(), account.getRating());
-								playerTimer = new PlayerTimer(gameRequest.getGameTime(), TEAM_WHITE);
-								opponentTimer = new PlayerTimer(gameRequest.getGameTime(), TEAM_BLACK);
+								playerTimer = new PlayerTimer(gameRequest.getGameTime(), Teams.WHITE_PLAYER);
+								opponentTimer = new PlayerTimer(gameRequest.getGameTime(), Teams.BLACK_PLAYER);
 								try {
 									toServer.writeObject(gameRequest);
 								} catch (Exception e1) {
@@ -396,9 +398,9 @@ public class Graphics extends Application implements GameConstants {
 									toServer.writeObject(new GameAccept(account.getId(), gameRequestOp.getClientID()));
 									playingOnlineGame = true;
 									Platform.runLater(() -> {
-										game = new Engine(GAME_MODE_ONLINE, TEAM_BLACK);
-										playerTimer = new PlayerTimer(gameRequestOp.getGameTime(), TEAM_WHITE);
-										opponentTimer = new PlayerTimer(gameRequestOp.getGameTime(), TEAM_BLACK);
+										game = new Engine(GAME_MODE_ONLINE, Teams.BLACK_PLAYER);
+										playerTimer = new PlayerTimer(gameRequestOp.getGameTime(), Teams.WHITE_PLAYER);
+										opponentTimer = new PlayerTimer(gameRequestOp.getGameTime(), Teams.BLACK_PLAYER);
 										Pane gamePane = getGamePane(prStage, gameRequestOp.getClientUsername(), gameRequestOp.getRating());
 										Scene gameScene = new Scene(gamePane, 900, 650);
 										gameScene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
@@ -430,7 +432,7 @@ public class Graphics extends Application implements GameConstants {
 						});
 					}
 					else if (obj instanceof GameAccepted) {
-						game = new Engine(GAME_MODE_ONLINE, TEAM_WHITE);
+						game = new Engine(GAME_MODE_ONLINE, Teams.WHITE_PLAYER);
 						
 						
 						GameAccepted gAccepted = (GameAccepted) obj;
@@ -503,8 +505,8 @@ public class Graphics extends Application implements GameConstants {
 								lab.setOnMouseClicked(e -> {
 									if (account.getId() != listOfInf.get(broj).getId()) {
 										GameRequest gameRequest = new GameRequest(account.getId(), account.getUsername(), listOfInf.get(broj).getId(), listOfInf.get(broj).getGameTime(), account.getRating());
-										playerTimer = new PlayerTimer(gameRequest.getGameTime(), TEAM_WHITE);
-										opponentTimer = new PlayerTimer(gameRequest.getGameTime(), TEAM_BLACK);
+										playerTimer = new PlayerTimer(gameRequest.getGameTime(), Teams.WHITE_PLAYER);
+										opponentTimer = new PlayerTimer(gameRequest.getGameTime(), Teams.BLACK_PLAYER);
 										try {
 											toServer.writeObject(gameRequest);
 										} catch (Exception e1) {
@@ -641,8 +643,8 @@ public class Graphics extends Application implements GameConstants {
 						
 						game.newGame();
 						game.invertTeam();
-						playerTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), TEAM_WHITE);
-						opponentTimer = new PlayerTimer(opponentTimer.getTimerBeginingTime(), TEAM_WHITE);
+						playerTimer = new PlayerTimer(playerTimer.getTimerBeginingTime(), Teams.WHITE_PLAYER);
+						opponentTimer = new PlayerTimer(opponentTimer.getTimerBeginingTime(), Teams.WHITE_PLAYER);
 						timeline.play();
 						Platform.runLater(() -> {
 							refreshGUIBoard(prStage);
@@ -733,8 +735,8 @@ public class Graphics extends Application implements GameConstants {
 									Button bt1 = new Button("1");
 									bt1.setOnAction(e1 -> {
 										GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 1, account.getRating());
-										playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-										opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+										playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+										opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 										try {
 											toServer.writeObject(gReq);
 											showOp.close();
@@ -745,8 +747,8 @@ public class Graphics extends Application implements GameConstants {
 									Button bt5 = new Button("5");
 									bt5.setOnAction(e1 -> {
 										GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 5, account.getRating());
-										playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-										opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+										playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+										opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 										try {
 											toServer.writeObject(gReq);
 											showOp.close();
@@ -757,8 +759,8 @@ public class Graphics extends Application implements GameConstants {
 									Button bt10 = new Button("10");
 									bt10.setOnAction(e1 -> {
 										GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 10, account.getRating());
-										playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-										opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+										playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+										opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 										try {
 											toServer.writeObject(gReq);
 											showOp.close();
@@ -769,8 +771,8 @@ public class Graphics extends Application implements GameConstants {
 									Button bt20 = new Button("20");
 									bt20.setOnAction(e1 -> {
 										GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 20, account.getRating());
-										playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-										opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+										playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+										opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 										try {
 											toServer.writeObject(gReq);
 											showOp.close();
@@ -835,8 +837,8 @@ public class Graphics extends Application implements GameConstants {
 								Button bt1 = new Button("1");
 								bt1.setOnAction(e1 -> {
 									GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 1, account.getRating());
-									playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-									opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+									playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+									opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 									try {
 										toServer.writeObject(gReq);
 										showOp.close();
@@ -847,8 +849,8 @@ public class Graphics extends Application implements GameConstants {
 								Button bt5 = new Button("5");
 								bt5.setOnAction(e1 -> {
 									GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 5, account.getRating());
-									playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-									opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+									playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+									opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 									try {
 										toServer.writeObject(gReq);
 										showOp.close();
@@ -859,8 +861,8 @@ public class Graphics extends Application implements GameConstants {
 								Button bt10 = new Button("10");
 								bt10.setOnAction(e1 -> {
 									GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 10, account.getRating());
-									playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-									opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+									playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+									opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 									try {
 										toServer.writeObject(gReq);
 										showOp.close();
@@ -871,8 +873,8 @@ public class Graphics extends Application implements GameConstants {
 								Button bt20 = new Button("20");
 								bt20.setOnAction(e1 -> {
 									GameRequest gReq = new GameRequest(account.getId(), account.getUsername(), labFriend.getFriend().getId(), 20, account.getRating());
-									playerTimer = new PlayerTimer(gReq.getGameTime(), TEAM_WHITE);
-									opponentTimer = new PlayerTimer(gReq.getGameTime(), TEAM_BLACK);
+									playerTimer = new PlayerTimer(gReq.getGameTime(), Teams.WHITE_PLAYER);
+									opponentTimer = new PlayerTimer(gReq.getGameTime(), Teams.BLACK_PLAYER);
 									try {
 										toServer.writeObject(gReq);
 										showOp.close();
@@ -1329,9 +1331,9 @@ public class Graphics extends Application implements GameConstants {
 		buttonFor1min.setPrefSize(80, 80);
 		buttonFor1min.setStyle("-fx-background-radius: 50");
 		buttonFor1min.setOnAction(e -> {
-			game = new Engine(GAME_MODE_BOTS, TEAM_WHITE);
-			playerTimer = new PlayerTimer(1, TEAM_WHITE);
-			opponentTimer = new PlayerTimer(1, TEAM_BLACK);
+			game = new Engine(GAME_MODE_BOTS, Teams.WHITE_PLAYER);
+			playerTimer = new PlayerTimer(1, Teams.WHITE_PLAYER);
+			opponentTimer = new PlayerTimer(1, Teams.BLACK_PLAYER);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
 			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
 			prStage.setScene(scene);
@@ -1342,9 +1344,9 @@ public class Graphics extends Application implements GameConstants {
 		buttonFor5min.setPrefSize(80, 80);
 		buttonFor5min.setStyle("-fx-background-radius: 50");
 		buttonFor5min.setOnAction(e -> {
-			game = new Engine(GAME_MODE_BOTS, TEAM_WHITE);
-			playerTimer = new PlayerTimer(5, TEAM_WHITE);
-			opponentTimer = new PlayerTimer(5, TEAM_BLACK);
+			game = new Engine(GAME_MODE_BOTS, Teams.WHITE_PLAYER);
+			playerTimer = new PlayerTimer(5, Teams.WHITE_PLAYER);
+			opponentTimer = new PlayerTimer(5, Teams.BLACK_PLAYER);
 			//startATimer(prStage);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
 			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
@@ -1360,9 +1362,9 @@ public class Graphics extends Application implements GameConstants {
 		buttonFor10min.setPrefSize(80, 80);
 		buttonFor10min.setStyle("-fx-background-radius: 50");
 		buttonFor10min.setOnAction(e -> {
-			game = new Engine(GAME_MODE_BOTS, TEAM_WHITE);
-			playerTimer = new PlayerTimer(10, TEAM_WHITE);
-			opponentTimer = new PlayerTimer(10, TEAM_BLACK);
+			game = new Engine(GAME_MODE_BOTS, Teams.WHITE_PLAYER);
+			playerTimer = new PlayerTimer(10, Teams.WHITE_PLAYER);
+			opponentTimer = new PlayerTimer(10, Teams.BLACK_PLAYER);
 			//startATimer(prStage);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
 			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
@@ -1374,9 +1376,9 @@ public class Graphics extends Application implements GameConstants {
 		buttonFor20min.setPrefSize(80, 80);
 		buttonFor20min.setStyle("-fx-background-radius: 50");
 		buttonFor20min.setOnAction(e -> {
-			game = new Engine(GAME_MODE_BOTS, TEAM_WHITE);
-			playerTimer = new PlayerTimer(20, TEAM_WHITE);
-			opponentTimer = new PlayerTimer(20, TEAM_BLACK);
+			game = new Engine(GAME_MODE_BOTS, Teams.WHITE_PLAYER);
+			playerTimer = new PlayerTimer(20, Teams.WHITE_PLAYER);
+			opponentTimer = new PlayerTimer(20, Teams.BLACK_PLAYER);
 			//startATimer(prStage);
 			Scene scene = new Scene(getGamePane(prStage, "Bot", 0), 900, 650);
 			scene.getStylesheets().add("file:src/client/graphic/appearance/style.css");
@@ -1668,7 +1670,7 @@ public class Graphics extends Application implements GameConstants {
 							paneChoser.setAlignment(Pos.CENTER);
 							FigureChoseButton bishopChose = new FigureChoseButton(game.getOnMove(), "Bishop");
 							bishopChose.setOnAction(e2 -> {
-								game.zamena(ii, jj, GameConstants.FIGURE_BISHOP);
+								game.zamena(ii, jj, ChessPiecesEnum.BISHOP);
 								isPromotionPlayed = true;
 								refreshGUIBoard(prStage);
 								nextMove(prStage);
@@ -1676,7 +1678,7 @@ public class Graphics extends Application implements GameConstants {
 							});
 							FigureChoseButton knightChose = new FigureChoseButton(game.getOnMove(), "Knight");
 							knightChose.setOnAction(e2 -> {
-								game.zamena(ii, jj, GameConstants.FIGURE_KNIGHT);
+								game.zamena(ii, jj, ChessPiecesEnum.KNIGHT);
 								isPromotionPlayed = true;
 								refreshGUIBoard(prStage);
 								nextMove(prStage);
@@ -1684,7 +1686,7 @@ public class Graphics extends Application implements GameConstants {
 							});
 							FigureChoseButton queenChose = new FigureChoseButton(game.getOnMove(), "Queen");
 							queenChose.setOnAction(e2 -> {
-								game.zamena(ii, jj, GameConstants.FIGURE_QUEEN);
+								game.zamena(ii, jj, ChessPiecesEnum.QUEEN);
 								isPromotionPlayed = true;
 								refreshGUIBoard(prStage);
 								nextMove(prStage);
@@ -1692,7 +1694,7 @@ public class Graphics extends Application implements GameConstants {
 							});
 							FigureChoseButton rookChose = new FigureChoseButton(game.getOnMove(), "Rook");
 							rookChose.setOnAction(e2 -> {
-								game.zamena(ii, jj, FIGURE_ROOK);
+								game.zamena(ii, jj, ChessPiecesEnum.ROOK);
 								isPromotionPlayed = true;
 								refreshGUIBoard(prStage);
 								nextMove(prStage);
@@ -1763,7 +1765,7 @@ public class Graphics extends Application implements GameConstants {
 		
 		pane.add(avatarImageStatus, 0, 0);
 		pane.add(opponentAvatarStatus, 1, 0);
-		if (game.getTeam() == TEAM_WHITE) {
+		if (game.getTeam() == Teams.WHITE_PLAYER) {
 			opponentUsernameGame = new Label(opponentUsername);
 			userNameGame = new Label(account.getUsername());
 			userRatingGame = new Label("" + account.getRating());

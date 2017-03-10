@@ -1,14 +1,15 @@
 package specialComponents;
 
+import game.Teams;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class FigureChoseButton extends Button {
 	
-	public FigureChoseButton(int team, String figure) {
+	public FigureChoseButton(Teams teams, String figure) {
 		String imgString;
-		if (team == 1) {
+		if (teams == Teams.WHITE_PLAYER) {
 			if (figure.equals("Bishop"))
 				imgString = "images/figure-icons/bishop-icon-white.png";
 			else if (figure.equals("Knight"))
@@ -17,8 +18,7 @@ public class FigureChoseButton extends Button {
 				imgString = "images/figure-icons/queen-icon-white.png";
 			else
 				imgString = "images/figure-icons/rook-icon-white.png";
-		}
-		else {
+		} else {
 			if (figure.equals("Bishop"))
 				imgString = "images/figure-icons/bishop-icon-black.png";
 			else if (figure.equals("Knight"))

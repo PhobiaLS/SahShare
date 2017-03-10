@@ -4,14 +4,15 @@ import geometry.Point;
 import java.util.ArrayList;
 
 import game.Directions;
+import game.Teams;
 
 public class Queen extends ChessPiece {
 
 	private static final long serialVersionUID = 3276167627441063962L;
 
-	public Queen(int team) {
+	public Queen(Teams team) {
 		super(team);
-		if (team == 1)
+		if (team == Teams.WHITE_PLAYER)
 			image = "images/figure-icons/queen-icon-white.png";
 		else
 			image = "images/figure-icons/queen-icon-black.png";
